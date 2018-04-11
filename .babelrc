@@ -1,0 +1,17 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "4"
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "add-module-exports",
+    ["transform-object-rest-spread", {"useBuiltIns": true}],
+    "transform-runtime"
+  ]
+}
