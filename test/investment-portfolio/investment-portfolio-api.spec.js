@@ -1,4 +1,4 @@
-import {InvestmentPortfolioAPI} from '../src/lib/investment-portfolio/investment-portfolio-api';
+import {InvestmentPortfolioAPI} from '../../src/lib/investment-portfolio-api';
 
 describe('Investment Portfolio', function() {
   describe('API', function() {

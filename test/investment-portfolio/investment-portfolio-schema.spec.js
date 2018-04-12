@@ -1,4 +1,4 @@
-import * as schemas from '../src/lib/investment-portfolio/investment-portfolio-schema';
+import * as schemas from '../../src/lib/investment-portfolio-schema';
 
 import {validate} from 'joi';
 
