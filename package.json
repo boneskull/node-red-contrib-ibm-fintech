@@ -12,7 +12,8 @@
   "license": "Apache-2.0",
   "node-red": {
     "nodes": {
-      "investment-portfolio": "nodes/investment-portfolio.js"
+      "investment-portfolio": "nodes/investment-portfolio/investment-portfolio.js",
+      "investment-portfolio-read": "nodes/investment-portfolio-read/investment-portfolio-read.js"
     }
   },
   "devDependencies": {
@@ -29,6 +30,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "joi": "^13.1.2",
+    "marko": "^4.9.6",
     "prepend-http": "^2.0.0",
     "vcap_services": "^0.3.4"
   }

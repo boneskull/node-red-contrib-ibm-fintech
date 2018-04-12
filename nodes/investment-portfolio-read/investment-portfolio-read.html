@@ -1,0 +1,37 @@
+<script>
+RED.nodes.registerType('investment-portfolio-read', {
+  category: 'FinTech',
+  defaults: {
+    name: {
+      value: ''
+    },
+    service: {
+      value: '',
+      type: 'investment-portfolio'
+    },
+    portfolioName: {
+      value: ''
+    },
+    selector: {
+      value: ''
+    }
+  },
+  inputs: 1,
+  outputs: 1
+});
+</script>
+
+<script type="text/x-red" data-template-name="investment-portfolio-read">
+  <div class="form-row">
+    <label for="node-input-service"><i class="icon-bookmark"></i> Service</label>
+    <input type="text" id="node-input-service"/>
+  </div>
+  <div class="form-row">
+    <label for="node-input-portfolio-name"><i class="icon-bookmark"></i> Portfolio Name</label>
+    <input type="text" id="node-input-portfolio-name"/>
+  </div>  
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
