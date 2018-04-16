@@ -60,7 +60,35 @@ describe('Investment Portfolio', function() {
       });
 
       describe('optional fields', function() {
-        it('should allow optional [rev]', async function() {
+        it('should allow optional number [rev]', async function() {
+          const portfolio = {
+            name: 'Retirement Portfolio',
+            timestamp: new Date(),
+            rev: 0
+          };
+
+          return expect(
+            validate(portfolio, schemas.DELETE_PORTFOLIO_SCHEMA),
+            'to be fulfilled with',
+            portfolio
+          );
+        });
+
+        it('should allow optional numeric string [rev]', async function() {
+          const portfolio = {
+            name: 'Retirement Portfolio',
+            timestamp: new Date(),
+            rev: '0'
+          };
+
+          return expect(
+            validate(portfolio, schemas.DELETE_PORTFOLIO_SCHEMA),
+            'to be fulfilled with',
+            {...portfolio, rev: 0}
+          );
+        });
+
+        it('should allow optional string [rev]', async function() {
           const portfolio = {
             name: 'Retirement Portfolio',
             timestamp: new Date(),

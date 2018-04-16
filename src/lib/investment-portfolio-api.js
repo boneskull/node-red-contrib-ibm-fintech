@@ -1,12 +1,13 @@
 import * as schemas from './investment-portfolio-schema';
 
+import Joi from 'joi';
 import {create as axios} from 'axios';
 import {getCredentials} from 'vcap_services';
 import prependHTTP from 'prepend-http';
 import {resolve} from 'url';
 
-const SERVICE_NAME = 'fss-portfolio-service';
-const DEFAULT_API_VERSION = 'v1';
+export const SERVICE_NAME = 'fss-portfolio-service';
+export const DEFAULT_API_VERSION = 'v1';
 
 export class InvestmentPortfolioAPI {
   constructor(credentials = {}, options = {}) {
@@ -15,6 +16,11 @@ export class InvestmentPortfolioAPI {
       ...vcapCredentials,
       ...credentials
     };
+
+    if (!(credentials.url && credentials.reader && credentials.reader.userid && credentials.reader.password)) {
+      throw new Error('invalid/missing credentials');
+    }
+
     this.options = {apiVersion: DEFAULT_API_VERSION, ...options};
 
     this.readerClient = axios({
@@ -46,18 +52,18 @@ export class InvestmentPortfolioAPI {
     return this.readerClient.get('/portfolios');
   }
 
-  async createPortfolio(data) {
+  async createPortfolio(data = {}) {
     data = Joi.attempt(data, schemas.CREATE_PORTFOLIO_SCHEMA);
     return this.writerClient.post('/portfolios', {data});
   }
 
-  async deletePortfolio(data) {
+  async deletePortfolio(data = {}) {
     const {name, timestamp, rev} = Joi.attempt(
       data,
       schemas.DELETE_PORTFOLIO_SCHEMA
     );
-    return this.writerClient.delete(`/portfolios/${name}/${timestamp}`, {
-      params: rev
+    return this.writerClient.delete(`/portfolios/${name}/${timestamp.toISOString()}`, {
+      params: typeof rev !== 'undefined' ? {rev} : {}
     });
   }
 

@@ -26,7 +26,8 @@ export const DELETE_PORTFOLIO_SCHEMA = Joi.object({
     .required()
     .iso()
     .description('Portfolio date and time'),
-  rev: Joi.string()
+  rev: Joi.alternatives()
+    .try(Joi.number(), Joi.string())
     .optional()
     .description('_rev of portfolio entry')
 });
@@ -40,7 +41,8 @@ export const UPDATE_PORTFOLIO_SCHEMA = Joi.object({
     .required()
     .iso()
     .description('Portfolio date and time'),
-  rev: Joi.string()
+  rev: Joi.alternatives()
+    .try(Joi.number(), Joi.string())
     .optional()
     .description('_rev of portfolio entry'),
   closed: Joi.boolean()
