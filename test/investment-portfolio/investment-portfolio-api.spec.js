@@ -3,7 +3,6 @@ import {
   InvestmentPortfolioAPI
 } from '../../src/lib/investment-portfolio-api';
 
-import axios from 'axios';
 import vcap from 'vcap_services';
 
 describe('Investment Portfolio', function() {
