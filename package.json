@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "common-tags": "^1.7.2",
     "joi": "^13.1.2",
     "marko": "^4.9.6",
     "prepend-http": "^2.0.0",
