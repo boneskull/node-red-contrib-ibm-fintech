@@ -16,7 +16,10 @@ export default function(RED) {
     }
 
     async read(options = {}) {
-      return this.api.listPortfolios();
+      if (options.portfolioName) {
+        return this.api.findPortfolios(options.portfolioName, options);
+      }
+      return this.api.findAllPortfolios();
     }
   }
 
