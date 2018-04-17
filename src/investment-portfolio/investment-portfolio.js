@@ -4,15 +4,13 @@ export default function(RED) {
   class InvestmentPortfolioServiceNode {
     constructor(config = {}) {
       RED.nodes.createNode(this, config);
-console.error(this.credentials);
+
       this.api = new InvestmentPortfolioAPI({
         reader: {
           userid: this.credentials.readerUsername,
           password: this.credentials.readerPassword
         },
-        writer: {
-
-        },
+        writer: {},
         url: config.host
       });
     }
