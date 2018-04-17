@@ -17,7 +17,12 @@ RED.nodes.registerType('investment-portfolio-read', {
     }
   },
   inputs: 1,
-  outputs: 1
+  outputs: 1,
+  color: '#85bb65',
+  paletteLabel: 'investment portfolio',
+  label: function () {
+    return this.name || 'investment portfolio';
+  }
 });
 </script>
 
