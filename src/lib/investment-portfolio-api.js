@@ -17,7 +17,14 @@ export class InvestmentPortfolioAPI {
       ...credentials
     };
 
-    if (!(credentials.url && credentials.reader && credentials.reader.userid && credentials.reader.password)) {
+    if (
+      !(
+        credentials.url &&
+        credentials.reader &&
+        credentials.reader.userid &&
+        credentials.reader.password
+      )
+    ) {
       throw new Error('invalid/missing credentials');
     }
 
@@ -62,9 +69,12 @@ export class InvestmentPortfolioAPI {
       data,
       schemas.DELETE_PORTFOLIO_SCHEMA
     );
-    return this.writerClient.delete(`/portfolios/${name}/${timestamp.toISOString()}`, {
+    return this.writerClient.delete(
+      `/portfolios/${name}/${timestamp.toISOString()}`,
+      {
       params: typeof rev !== 'undefined' ? {rev} : {}
-    });
+      }
+    );
   }
 
   async updatePortfolio(data) {}
