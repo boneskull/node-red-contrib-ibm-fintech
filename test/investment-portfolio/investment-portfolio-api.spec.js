@@ -127,14 +127,14 @@ describe('Investment Portfolio', function() {
 
       beforeEach(function() {
         api = new InvestmentPortfolioAPI(credentials);
-        sbx.stub(api.readerClient, 'get').returns(Promise.resolve());
+        sbx.stub(api.readerClient, 'get').returns(Promise.resolve({data: []}));
         sbx.stub(api.writerClient, 'post').returns(Promise.resolve());
         sbx.stub(api.writerClient, 'delete').returns(Promise.resolve());
       });
 
-      describe('listPortfolios()', function() {
+      describe('findAllPortfolios()', function() {
         it('should GET `/portfolios` path', async function() {
-          await api.listPortfolios();
+          await api.findAllPortfolios();
           expect(
             api.readerClient.get,
             'to have a call exhaustively satisfying',

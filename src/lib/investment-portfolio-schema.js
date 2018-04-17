@@ -1,19 +1,20 @@
 import Joi from 'joi';
+import {oneLine} from 'common-tags';
 
 export const CREATE_PORTFOLIO_SCHEMA = Joi.object({
   closed: Joi.boolean()
     .default(false)
     .description('Set to true if portfolio is closed.'),
-  data: Joi.object()
-    .optional()
-    .description('Portfolio data'),
+  data: Joi.object().description('Portfolio data'),
   name: Joi.string()
     .required()
     .min(1)
+    .example('myPortfolio')
     .description('Portfolio name'),
   timestamp: Joi.date()
     .required()
     .iso()
+    .example('2018-04-17T03:29:03.328Z')
     .description('Portfolio date and time')
 });
 
@@ -21,14 +22,15 @@ export const DELETE_PORTFOLIO_SCHEMA = Joi.object({
   name: Joi.string()
     .required()
     .min(1)
+    .example('myPortfolio')
     .description('Portfolio name'),
   timestamp: Joi.date()
     .required()
     .iso()
-    .description('Portfolio date and time'),
+    .example('2018-04-17T03:29:03.328Z')
+    .description('Portfolio date and time. Must be a valid ISO 8601 string.'),
   rev: Joi.alternatives()
     .try(Joi.number(), Joi.string())
-    .optional()
     .description('_rev of portfolio entry')
 });
 
@@ -36,19 +38,107 @@ export const UPDATE_PORTFOLIO_SCHEMA = Joi.object({
   name: Joi.string()
     .required()
     .min(1)
+    .example('myPortfolio')
     .description('Portfolio name'),
   timestamp: Joi.date()
     .required()
     .iso()
-    .description('Portfolio date and time'),
+    .example('2018-04-17T03:29:03.328Z')
+    .description('Portfolio date and time. Must be a valid ISO 8601 string.'),
   rev: Joi.alternatives()
     .try(Joi.number(), Joi.string())
-    .optional()
+    .example(1)
     .description('_rev of portfolio entry'),
   closed: Joi.boolean()
     .default(false)
     .description('Set to true if portfolio is closed.'),
-  data: Joi.object()
-    .optional()
-    .description('Portfolio data')
+  data: Joi.object().description('Portfolio data')
+});
+
+export const FIND_PORTFOLIO_BY_NAME_SCHEMA = Joi.object({
+  portfolioName: Joi.string()
+    .required()
+    .example('myPortfolio')
+    .min(1)
+    .description('Name of the portfolio to retrieve'),
+  atDate: Joi.date()
+    .iso()
+    .example('2018-04-17T03:29:03.328Z')
+    .description(
+      oneLine`
+      When this parameter specifies a date and time, the portfolios with
+      timestamps on or before the specified date and time are returned.
+      Must be a valid ISO 8601 string.
+      `
+    ),
+  hasAnyKey: Joi.array()
+    .items(
+      Joi.string()
+        .description('Key name')
+        .example('manager')
+    )
+    .example(['manager', 'acting-manager'])
+    .description(
+      oneLine`
+      When the data field of the portfolio contains *any* of the keys specified
+      by this parameter, that portfolio is returned.
+      `
+    ),
+  hasKey: Joi.array()
+    .items(
+      Joi.string()
+        .description('Key name')
+        .example('manager')
+    )
+    .example(['manager', 'acting-manager'])
+    .description(
+      oneLine`
+      When the data field of the portfolio contains the keys specified by
+      this parameter, that portfolio is returned. 
+      `
+    ),
+  hasKeyValue: Joi.object()
+    .example({manager: 'Edward Lam'})
+    .description(
+      oneLine`
+      When the data field of the portfolio contains the keys and values
+      specified by this parameter, that portfolio is returned.  All values
+      will be coerced into strings.
+      `
+    ),
+  hasNoKey: Joi.array()
+    .items(
+      Joi.string()
+        .description('Key name')
+        .example('cancelled')
+    )
+    .example(['cancelled'])
+    .description(
+      oneLine`
+      When the data field of the portfolio doesn't contain the keys and
+      values specified by this parameter, that portfolio is returned.
+      `
+    ),
+  limit: Joi.number()
+    .integer()
+    .positive()
+    .example(10)
+    .description(
+      oneLine`
+      When the value is an integer, the number of portfolios returned is limited
+      to the number specified. If a number is not specified, all portfolios
+      matching the other criteria are returned.
+      `
+    ),
+  sort: Joi.string()
+    .valid('asc', 'desc')
+    .example('asc')
+    .description(
+      oneLine`
+      When the value is \`asc\`, the portfolios with the earliest timestamps
+      are returned first. When the value is \`desc\`, returns the portfolios
+      with the most recent timestamps first. If no value is specified, then
+      the portfolios are not sorted.
+      `
+    )
 });
