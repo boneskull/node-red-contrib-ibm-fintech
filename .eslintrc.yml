@@ -1,0 +1,19 @@
+extends:
+  - semistandard
+  - prettier
+plugins:
+  - prettier
+rules:
+  prettier/prettier:
+    - error
+    - singleQuote: true
+      bracketSpacing: false
+  strict:
+    - error
+    - safe
+overrides:
+  -
+    files:
+      - wallaby.js
+    parserOptions:
+      sourceType: script
