@@ -73,21 +73,30 @@ export class InvestmentPortfolioAPI {
 
   /**
    * Find one or more Portfolios by name
-   * @param {string} portfolioName - Portfolio name
    * @param {Object} options - See {@link FIND_PORTFOLIO_BY_NAME_SCHEMA}
-   * @returns Promise<Portfolio[]>
+   * @memberof InvestmentPortfolioAPI
+   * @throws Invalid options
+   * @returns Promise<Portfolio[]> Matching Portfolio(s)
    */
-  async findNamedPortfolios(portfolioName, options = {}) {
+  async findNamedPortfolios(options = {}) {
     const params = Joi.attempt(options, schemas.FIND_PORTFOLIO_BY_NAME_SCHEMA);
     params.hasKeyValue = Object.entries(params.hasKeyValue)
       .map(([key, value]) => `${key}:${value}`)
       .join(',');
-    const res = await this.readerClient.get(`/portfolios/${portfolioName}`, {
-      params
-    });
+    const res = await this.readerClient.get(
+      `/portfolios/${options.portfolioName}`,
+      {
+        params
+      }
+    );
     return res.data;
   }
 
+  /**
+   * Find ALL Portfolios
+   * @memberof InvestmentPortfolioAPI
+   * @returns Promise<Portfolio[]> All portfolios
+   */
   async findAllPortfolios() {
     const res = await this.readerClient.get('/portfolios');
     return res.data.portfolios;
