@@ -1,6 +1,6 @@
 <script>
 RED.nodes.registerType('investment-portfolio-read', {
-  category: 'FinTech',
+  category: 'fintech',
   defaults: {
     name: {
       value: ''
@@ -10,6 +10,30 @@ RED.nodes.registerType('investment-portfolio-read', {
       type: 'investment-portfolio'
     },
     portfolioName: {
+      value: ''
+    },
+    date: {
+      value: ''
+    },
+    time: {
+      value: ''
+    },
+    limit: {
+      value: 1
+    },
+    sort: {
+      value: 'asc'
+    },
+    hasKey: {
+      value: ''
+    },
+    hasKeyValueKey: {
+      value: ''
+    },
+    hasKeyValueValue: {
+      value: ''
+    },
+    hasNoKey: {
       value: ''
     },
     selector: {
@@ -28,15 +52,23 @@ RED.nodes.registerType('investment-portfolio-read', {
 
 <script type="text/x-red" data-template-name="investment-portfolio-read">
   <div class="form-row">
-    <label for="node-input-service"><i class="icon-bookmark"></i> Service</label>
+    <label for="node-input-service"><i class="fa fa-bookmark"></i> Service</label>
     <input type="text" id="node-input-service"/>
   </div>
   <div class="form-row">
-    <label for="node-input-portfolio-name"><i class="icon-bookmark"></i> Portfolio Name</label>
-    <input type="text" id="node-input-portfolio-name"/>
-  </div>  
+    <label for="node-input-portfolioName"><i class="fa fa-book"></i> Portfolio</label>
+    <input type="text" id="node-input-portfolioName" placeholder="Portfolio Name"/>
+  </div>
+  <div class="form-row">
+    <label for="node-input-date"><i class="fa fa-calendar"></i> After Date</label>
+    <input type="date" id="node-input-date"/>
+  </div>
+  <div class="form-row">
+    <label for="node-input-time"><i class="fa fa-clock-o"></i> Time</label>
+    <input type="time" id="node-input-time"/>
+  </div>
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-    <input type="text" id="node-input-name" placeholder="Name">
+    <input type="text" id="node-input-name" placeholder="Name"/>
   </div>
 </script>
