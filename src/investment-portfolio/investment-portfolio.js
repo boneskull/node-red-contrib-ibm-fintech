@@ -13,13 +13,13 @@ export default function(RED) {
         writer: {},
         url: config.host
       });
+
+      this.trace(`Config: ${JSON.stringify(config)}`);
     }
 
     async read(options = {}) {
-      if (options.portfolioName) {
-        return this.api.findPortfolios(options.portfolioName, options);
-      }
-      return this.api.findAllPortfolios();
+      this.debug(`Reading with options: ${JSON.stringify(options)}`);
+      return this.api.findPortfolios(options);
     }
   }
 
