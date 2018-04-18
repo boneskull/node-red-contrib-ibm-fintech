@@ -57,9 +57,9 @@ export const UPDATE_PORTFOLIO_SCHEMA = Joi.object({
 
 export const FIND_PORTFOLIO_BY_NAME_SCHEMA = Joi.object({
   portfolioName: Joi.string()
+    .min(1)
     .required()
     .example('myPortfolio')
-    .min(1)
     .description('Name of the portfolio to retrieve'),
   atDate: Joi.date()
     .iso()
