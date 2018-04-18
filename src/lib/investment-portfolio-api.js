@@ -1,10 +1,14 @@
 import * as schemas from './investment-portfolio-schema';
 
 import Joi from 'joi';
+import _ from 'lodash/fp';
 import {create as axios} from 'axios';
+import d from 'debug';
 import {getCredentials} from 'vcap_services';
 import prependHTTP from 'prepend-http';
 import {resolve} from 'url';
+
+const debug = d('node-red-contrib-ibm-fintech');
 
 /**
  * @typedef {Object} Portfolio
@@ -18,6 +22,8 @@ import {resolve} from 'url';
 export const SERVICE_NAME = 'fss-portfolio-service';
 export const DEFAULT_API_VERSION = 'v1';
 
+const normalizeParams = _.omitBy(_.isUndefined);
+
 export class InvestmentPortfolioAPI {
   constructor(credentials = {}, options = {}) {
     const vcapCredentials = getCredentials(SERVICE_NAME);
@@ -29,9 +35,8 @@ export class InvestmentPortfolioAPI {
     if (
       !(
         credentials.url &&
-        credentials.reader &&
-        credentials.reader.userid &&
-        credentials.reader.password
+        _.get('reader.userid', credentials) &&
+        _.get('reader.password', credentials)
       )
     ) {
       throw new Error('invalid/missing credentials');
@@ -46,6 +51,7 @@ export class InvestmentPortfolioAPI {
         password: credentials.reader.password
       }
     });
+
     this.writerClient = axios({
       baseURL: this.url,
       auth: {
@@ -68,7 +74,12 @@ export class InvestmentPortfolioAPI {
     if (!(options.selector || options.portfolioName)) {
       return this.findAllPortfolios();
     }
-    return this.findNamedPortfolios(options.portfolioName, options);
+    if (options.selector) {
+      return options.portfolioName
+        ? this.findNamedPortfolioBySelector(options)
+        : this.findPortfolioBySelector(options);
+    }
+    return this.findNamedPortfolios(options);
   }
 
   /**
@@ -79,17 +90,28 @@ export class InvestmentPortfolioAPI {
    * @returns Promise<Portfolio[]> Matching Portfolio(s)
    */
   async findNamedPortfolios(options = {}) {
-    const params = Joi.attempt(options, schemas.FIND_PORTFOLIO_BY_NAME_SCHEMA);
-    params.hasKeyValue = Object.entries(params.hasKeyValue)
-      .map(([key, value]) => `${key}:${value}`)
-      .join(',');
-    const res = await this.readerClient.get(
-      `/portfolios/${options.portfolioName}`,
-      {
+    let params = Joi.attempt(options, schemas.FIND_PORTFOLIO_BY_NAME_SCHEMA);
+    params.hasKeyValue = params.hasKeyValue
+      ? _.pipe(_.entries, _.map(_.join(':')), _.join(','))(params.hasKeyValue)
+      : void 0;
+    const path = `/portfolios/${options.portfolioName}`;
+    delete params.portfolioName;
+    params = normalizeParams(params);
+    debug(`GET /portfolios${path}`, params);
+    try {
+      const res = await this.readerClient.get(path, {
         params
+      });
+      return {portfolios: res.data.portfolio};
+    } catch (err) {
+      switch (_.get('response.status', err)) {
+        case 404:
+          throw new Error(
+            `Portfolio with name "${options.portfolioName}" not found!`
+          );
       }
-    );
-    return res.data;
+      throw err;
+    }
   }
 
   /**
@@ -98,12 +120,14 @@ export class InvestmentPortfolioAPI {
    * @returns Promise<Portfolio[]> All portfolios
    */
   async findAllPortfolios() {
+    debug('GET /portfolios');
     const res = await this.readerClient.get('/portfolios');
-    return res.data.portfolios;
+    return {portfolios: res.data.portfolios};
   }
 
   async createPortfolio(data = {}) {
     data = Joi.attempt(data, schemas.CREATE_PORTFOLIO_SCHEMA);
+    debug('POST /portfolios', data);
     return this.writerClient.post('/portfolios', {data});
   }
 
@@ -115,10 +139,35 @@ export class InvestmentPortfolioAPI {
     return this.writerClient.delete(
       `/portfolios/${name}/${timestamp.toISOString()}`,
       {
-        params: typeof rev !== 'undefined' ? {rev} : {}
+        params: _.isUndefined(rev) ? {} : {rev}
       }
     );
   }
 
   async updatePortfolio(data) {}
+
+  async findPortfolioBySelector(options = {}) {}
+
+  async findNamedPortfolioBySelector(options = {}) {
+    const {portfolioName, selector} = Joi.attempt(
+      options,
+      schemas.FIND_PORTFOLIO_BY_NAME_AND_SELECTOR_SCHEMA
+    );
+    const path = `/portfolios/${portfolioName}`;
+    debug(`POST ${path}`, selector);
+    try {
+      const res = await this.writerClient.post(path, {
+        data: selector
+      });
+      return {portfolios: res.data.portfolio};
+    } catch (err) {
+      switch (_.get('response.status', err)) {
+        case 404:
+          throw new Error(
+            `Portfolio with name "${options.portfolioName}" not found!`
+          );
+      }
+      throw err;
+    }
+  }
 }

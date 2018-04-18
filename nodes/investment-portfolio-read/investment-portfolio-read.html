@@ -3,20 +3,19 @@ RED.nodes.registerType('investment-portfolio-read', {
   category: 'fintech',
   defaults: {
     name: {
-      value: ''
+      value: null
     },
     service: {
-      value: '',
       type: 'investment-portfolio'
     },
     portfolioName: {
-      value: ''
+      value: null
     },
     date: {
-      value: ''
+      value: null
     },
     time: {
-      value: ''
+      value: null
     },
     limit: {
       value: 1
@@ -25,19 +24,27 @@ RED.nodes.registerType('investment-portfolio-read', {
       value: 'asc'
     },
     hasKey: {
-      value: ''
+      value: null
     },
-    hasKeyValueKey: {
-      value: ''
-    },
-    hasKeyValueValue: {
-      value: ''
+    hasKeyValue: {
+      value: null
     },
     hasNoKey: {
-      value: ''
+      value: null
     },
     selector: {
-      value: ''
+      value: null,
+      validate: function (v) {
+        if (!v) {
+          return true;
+        }
+        try {
+          JSON.parse(v);
+          return true;
+        } catch (ignored) {
+          return false;
+        }
+      }
     }
   },
   inputs: 1,
@@ -45,7 +52,7 @@ RED.nodes.registerType('investment-portfolio-read', {
   color: '#85bb65',
   paletteLabel: 'investment portfolio',
   label: function () {
-    return this.name || 'investment portfolio';
+    return this.name || this.portfolioName || 'investment portfolio';
   }
 });
 </script>
@@ -57,7 +64,7 @@ RED.nodes.registerType('investment-portfolio-read', {
   </div>
   <div class="form-row">
     <label for="node-input-portfolioName"><i class="fa fa-book"></i> Portfolio</label>
-    <input type="text" id="node-input-portfolioName" placeholder="Portfolio Name"/>
+    <input type="text" id="node-input-portfolioName" placeholder="(from topic)"/>
   </div>
   <div class="form-row">
     <label for="node-input-date"><i class="fa fa-calendar"></i> After Date</label>

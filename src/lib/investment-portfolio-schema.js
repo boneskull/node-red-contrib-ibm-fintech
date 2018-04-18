@@ -140,5 +140,30 @@ export const FIND_PORTFOLIO_BY_NAME_SCHEMA = Joi.object({
       with the most recent timestamps first. If no value is specified, then
       the portfolios are not sorted.
       `
+    ),
+  selector: Joi.object()
+    .example({
+      selector: {
+        manager: 'Edward Lam'
+      }
+    })
+    .description(
+      oneLine`This operation returns portfolios that have data matching the
+      specified selector. Use this operation for complex queries.
+      `
     )
+    .notes(
+      'https://console.ng.bluemix.net/docs/services/Cloudant/api/cloudant_query.html#selector-syntax'
+    )
+});
+
+export const FIND_PORTFOLIO_BY_NAME_AND_SELECTOR_SCHEMA = Joi.object({
+  portfolioName: Joi.string()
+    .min(1)
+    .required()
+    .example('myPortfolio')
+    .description('Name of the portfolio to retrieve'),
+  selector: Joi.object()
+    .required()
+    .example({manager: 'Edward Lam'})
 });
