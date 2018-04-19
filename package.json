@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "babel -d nodes src",
+    "build": "babel -d dist src",
     "test": "mocha --require babel-register --require test/setup.js \"test/**/*.spec.js\"",
     "format": "prettier-eslint --write \"*.js\" \"src/**/*.js\" \"test/**/*.js\"",
     "lint": "eslint ."
@@ -14,9 +14,10 @@
   "license": "Apache-2.0",
   "node-red": {
     "nodes": {
-      "investment-portfolio": "nodes/investment-portfolio/investment-portfolio.js",
-      "investment-portfolio-read": "nodes/investment-portfolio-read/investment-portfolio-read.js",
-      "investment-portfolio-create": "nodes/investment-portfolio-create/investment-portfolio-create.js"
+      "investment-portfolio": "dist/nodes/investment-portfolio.js",
+      "investment-portfolio-read": "dist/nodes/investment-portfolio-read.js",
+      "investment-portfolio-create": "dist/nodes/investment-portfolio-create.js",
+      "predictive-market-scenario": "dist/nodes/predictive-market-scenario.js"
     }
   },
   "devDependencies": {

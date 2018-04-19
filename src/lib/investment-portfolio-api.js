@@ -1,14 +1,14 @@
 import * as schemas from './investment-portfolio-schema';
 
-import Joi from 'joi';
+import {CloudAPI} from './cloud-api';
 import _ from 'lodash/fp';
-import {create as axios} from 'axios';
+import {attempt} from 'joi';
+import {create as createClient} from 'axios';
 import d from 'debug';
-import {getCredentials} from 'vcap_services';
-import prependHTTP from 'prepend-http';
+import {makeHTTPSURL} from './utils';
 import {resolve} from 'url';
 
-const debug = d('node-red-contrib-ibm-fintech');
+const debug = d('ibm-fintech:investment-portfolio');
 
 /**
  * @typedef {Object} Portfolio
@@ -19,50 +19,48 @@ const debug = d('node-red-contrib-ibm-fintech');
  * @property {string} timestamp - ISO 9601 date
  */
 
-export const SERVICE_NAME = 'fss-portfolio-service';
 export const DEFAULT_API_VERSION = 'v1';
 
 const normalizeParams = _.omitBy(_.isUndefined);
 
-export class InvestmentPortfolioAPI {
+export class InvestmentPortfolioAPI extends CloudAPI {
   constructor(credentials = {}, options = {}) {
-    const vcapCredentials = getCredentials(SERVICE_NAME);
-    credentials = this.credentials = {
-      ...vcapCredentials,
-      ...credentials
-    };
-
+    super(credentials);
     if (
-      !(
-        credentials.url &&
-        _.get('reader.userid', credentials) &&
-        _.get('reader.password', credentials)
-      )
+      !_.overEvery(
+        _.get('credentials.url'),
+        _.get('credentials.reader.userid'),
+        _.get('credentials.reader.password')
+      )(this)
     ) {
       throw new Error('invalid/missing credentials');
     }
 
-    this.options = {apiVersion: DEFAULT_API_VERSION, ...options};
+    this.options = _.defaults({apiVersion: DEFAULT_API_VERSION}, options);
 
-    this.readerClient = axios({
+    this.readerClient = createClient({
       baseURL: this.url,
       auth: {
-        username: credentials.reader.userid,
-        password: credentials.reader.password
+        username: this.credentials.reader.userid,
+        password: this.credentials.reader.password
       }
     });
 
-    this.writerClient = axios({
+    this.writerClient = createClient({
       baseURL: this.url,
       auth: {
-        username: credentials.writer.userid,
-        password: credentials.writer.password
+        username: this.credentials.writer.userid,
+        password: this.credentials.writer.password
       }
     });
   }
 
+  get serviceName() {
+    return 'fss-portfolio-service';
+  }
+
   get url() {
-    const baseURL = prependHTTP(this.credentials.url, {https: true});
+    const baseURL = makeHTTPSURL(this.credentials.url);
     return resolve(baseURL, `/api/${this.apiVersion}`);
   }
 
@@ -90,7 +88,7 @@ export class InvestmentPortfolioAPI {
    * @returns Promise<Portfolio[]> Matching Portfolio(s)
    */
   async findNamedPortfolios(options = {}) {
-    let params = Joi.attempt(options, schemas.FIND_PORTFOLIO_BY_NAME_SCHEMA);
+    let params = attempt(options, schemas.FIND_PORTFOLIO_BY_NAME_SCHEMA);
     params.hasKeyValue = params.hasKeyValue
       ? _.pipe(_.entries, _.map(_.join(':')), _.join(','))(params.hasKeyValue)
       : void 0;
@@ -114,6 +112,10 @@ export class InvestmentPortfolioAPI {
     }
   }
 
+  async getHoldings(options = {}) {
+    // let params = attempt(options, schemas.GET_HOLDINGS_SCHEMA);
+  }
+
   /**
    * Find ALL Portfolios
    * @memberof InvestmentPortfolioAPI
@@ -126,13 +128,13 @@ export class InvestmentPortfolioAPI {
   }
 
   async createPortfolio(data = {}) {
-    data = Joi.attempt(data, schemas.CREATE_PORTFOLIO_SCHEMA);
+    data = attempt(data, schemas.CREATE_PORTFOLIO_SCHEMA);
     debug('POST /portfolios', data);
     return this.writerClient.post('/portfolios', {data});
   }
 
   async deletePortfolio(data = {}) {
-    const {name, timestamp, rev} = Joi.attempt(
+    const {name, timestamp, rev} = attempt(
       data,
       schemas.DELETE_PORTFOLIO_SCHEMA
     );
@@ -149,7 +151,7 @@ export class InvestmentPortfolioAPI {
   async findPortfolioBySelector(options = {}) {}
 
   async findNamedPortfolioBySelector(options = {}) {
-    const {portfolioName, selector} = Joi.attempt(
+    const {portfolioName, selector} = attempt(
       options,
       schemas.FIND_PORTFOLIO_BY_NAME_AND_SELECTOR_SCHEMA
     );

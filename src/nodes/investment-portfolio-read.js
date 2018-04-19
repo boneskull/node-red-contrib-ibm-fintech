@@ -1,4 +1,5 @@
 import _ from 'lodash/fp';
+import {inspect} from '../lib/utils';
 
 const parseDate = (date, time) => {
   if (date) {
@@ -40,11 +41,11 @@ export default function(RED) {
 
       this.service = RED.nodes.getNode(config.service);
 
-      this.trace(`Original config: ${JSON.stringify(config)}`);
-      this.trace(`Processed config: ${JSON.stringify(this.config)}`);
+      this.trace(inspect`Original config: ${config}`);
+      this.trace(inspect`Processed config: ${this.config}`);
 
       this.on('input', async msg => {
-        this.trace(`Message received: ${JSON.stringify(msg)}`);
+        this.trace(inspect`Message received: ${msg}`);
         if (this.service) {
           try {
             let payload = _.isObject(msg.payload) ? msg.payload : {};
@@ -57,9 +58,9 @@ export default function(RED) {
               config.selector,
               config
             );
-            this.debug(`Computed config: ${JSON.stringify(config)}`);
+            this.debug(inspect`Computed config: ${config}`);
             const {portfolios} = await this.service.read(this.config);
-            this.debug(`Received portfolios: ${JSON.stringify(portfolios)}`);
+            this.debug(inspect`Received portfolios: ${portfolios}`);
             this.send({
               ...msg,
               payload: portfolios.shift()
@@ -69,9 +70,7 @@ export default function(RED) {
           }
         } else {
           this.warn(
-            `Message received, but no service configured: ${JSON.stringify(
-              msg
-            )}`
+            inspect`Message received, but no service configured: ${msg}`
           );
           // stop flow?
         }

@@ -1,4 +1,5 @@
 import {InvestmentPortfolioAPI} from '../lib/investment-portfolio-api';
+import {inspect} from '../lib/utils';
 
 export default function(RED) {
   class InvestmentPortfolioServiceNode {
@@ -10,15 +11,18 @@ export default function(RED) {
           userid: this.credentials.readerUsername,
           password: this.credentials.readerPassword
         },
-        writer: {},
+        writer: {
+          userid: this.credentials.writerUsername,
+          password: this.credentials.writerPassword
+        },
         url: config.host
       });
 
-      this.trace(`Config: ${JSON.stringify(config)}`);
+      this.trace(inspect`Config: ${config}`);
     }
 
     async read(options = {}) {
-      this.debug(`Reading with options: ${JSON.stringify(options)}`);
+      this.debug(inspect`Reading with options: ${options}`);
       return this.api.findPortfolios(options);
     }
   }
