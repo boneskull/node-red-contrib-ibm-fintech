@@ -1,43 +1,76 @@
-import {CloudAPI} from './cloud-api';
+import {ScenarioAPI} from './scenario-api';
 import _ from 'lodash/fp';
-// import {attempt} from 'joi';
-import {create as createClient} from 'axios';
-import {makeHTTPSURL} from './utils';
-// import d from 'debug';
-import {resolve} from 'url';
+import {createReadStream} from 'fs';
 
-// const debug = d('ibm-fintech:predictive-market-scenario');
-
-export const DEFAULT_API_VERSION = 'v1';
-
-export class SimulatedInstrumentAnalyticsAPI extends CloudAPI {
+/**
+ * Provides wrapper around Simulated Instrument Analytics API
+ *
+ * @export
+ * @class SimulatedInstrumentAnalyticsAPI
+ * @extends {ScenarioAPI}
+ */
+export class SimulatedInstrumentAnalyticsAPI extends ScenarioAPI {
+  /**
+   * Creates an instance of SimulatedInstrumentAnalyticsAPI.
+   * @param {any} [credentials={}]
+   * @param {any} [options={}]
+   * @memberof SimulatedInstrumentAnalyticsAPI
+   */
   constructor(credentials = {}, options = {}) {
-    super(credentials);
+    super(credentials, options);
 
-    if (!(this.credentials.url && this.credentials.token)) {
-      throw new Error('invalid/missing credentials');
-    }
-
-    this.options = _.defaults({apiVersion: DEFAULT_API_VERSION}, options);
-
-    this.client = createClient({
-      baseURL: this.url,
-      headers: {
-        'X-IBM-Access-Token': this.credentials.token
-      }
-    });
+    this.client.defaults.headers.common = {
+      ...this.client.defaults.headers.common,
+      enctype: 'string',
+      'content-type': 'multipart/form-data'
+    };
   }
 
+  /**
+   * Returns service name per `VCAP_SERVICES`
+   *
+   * @readonly
+   * @memberof SimulatedInstrumentAnalyticsAPI
+   */
   get serviceName() {
     return 'fss-scenario-analytics-service';
   }
 
-  get url() {
-    const baseURL = makeHTTPSURL(this.credentials.url);
-    return resolve(baseURL, `/api/${this.apiVersion}/scenario`);
+  /**
+   * Instruments
+   *
+   * @param {any} id
+   * @param {any} model
+   * @returns
+   * @memberof SimulatedInstrumentAnalyticsAPI
+   */
+  async instrument(id, model) {
+    try {
+      const res = await this.client.post(`/instrument/${id}`, {
+        data: {
+          scenario_file: createReadStream(model)
+        }
+      });
+      return {analytics: res.data};
+    } catch (err) {
+      switch (_.get('response.status', err)) {
+        case 404:
+          throw new Error(`Instrument with ID "${id}" not found!`);
+      }
+      throw err;
+    }
   }
 
-  get apiVersion() {
-    return this.options.apiVersion;
+  /**
+   * @todo implement
+   *
+   * @memberof SimulatedInstrumentAnalyticsAPI
+   */
+  async instrumentMany() {
+    throw new Error('todo');
+  }
+
+  get defaultApiVersion() {
+    return 'v1';
   }
 }
