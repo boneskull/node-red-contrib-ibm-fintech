@@ -1,8 +1,4 @@
-import {
-  DEFAULT_API_VERSION,
-  InvestmentPortfolioAPI
-} from '../../src/lib/investment-portfolio-api';
-
+import {InvestmentPortfolioAPI} from '../../src/lib/investment-portfolio-api';
 import vcap from 'vcap_services';
 
 describe('Investment Portfolio', function() {
@@ -58,9 +54,10 @@ describe('Investment Portfolio', function() {
       });
 
       it('should store default API version ', function() {
-        expect(new InvestmentPortfolioAPI(credentials), 'to satisfy', {
+        const api = new InvestmentPortfolioAPI(credentials);
+        expect(api, 'to satisfy', {
           options: {
-            apiVersion: DEFAULT_API_VERSION
+            apiVersion: api.defaultApiVersion
           }
         });
       });
@@ -143,6 +140,69 @@ describe('Investment Portfolio', function() {
         });
       });
 
+      describe('findPortfolios()', function() {
+        beforeEach(function() {
+          sbx.stub(api, 'findAllPortfolios');
+          sbx.stub(api, 'findNamedPortfolioBySelector');
+          sbx.stub(api, 'findPortfolioBySelector');
+          sbx.stub(api, 'findNamedPortfolios');
+        });
+
+        describe('when passed neither a `selector` nor `portfolioName` property', function() {
+          it('should call `findAllPortfolios()`', async function() {
+            await api.findPortfolios();
+            expect(api, 'to satisfy', {
+              findAllPortfolios: expect.it('was called with', void 0),
+              findNamedPortfolioBySelector: expect.it('was not called'),
+              findPortfolioBySelector: expect.it('was not called'),
+              findNamedPortfolios: expect.it('was not called')
+            });
+          });
+        });
+
+        describe('when passed a `selector` and `portfolioName` property', function() {
+          it('should call `findPortfolioBySelector()`', async function() {
+            const options = {selector: {}, portfolioName: 'foo'};
+            await api.findPortfolios(options);
+            expect(api, 'to satisfy', {
+              findAllPortfolios: expect.it('was not called'),
+              findNamedPortfolioBySelector: expect.it(
+                'was called with',
+                options
+              ),
+              findPortfolioBySelector: expect.it('was not called'),
+              findNamedPortfolios: expect.it('was not called')
+            });
+          });
+        });
+
+        describe('when passed a `selector` but no `portfolioName` property', function() {
+          it('should call `findPortfolioBySelector()`', async function() {
+            const options = {selector: {}};
+            await api.findPortfolios(options);
+            expect(api, 'to satisfy', {
+              findAllPortfolios: expect.it('was not called'),
+              findNamedPortfolioBySelector: expect.it('was not called'),
+              findPortfolioBySelector: expect.it('was called with', options),
+              findNamedPortfolios: expect.it('was not called')
+            });
+          });
+        });
+
+        describe('when passed a `portfolioName` but no `selector` property', function() {
+          it('should call `findPortfolioBySelector()`', async function() {
+            const options = {portfolioName: 'foo'};
+            await api.findPortfolios(options);
+            expect(api, 'to satisfy', {
+              findAllPortfolios: expect.it('was not called'),
+              findNamedPortfolioBySelector: expect.it('was not called'),
+              findPortfolioBySelector: expect.it('was not called'),
+              findNamedPortfolios: expect.it('was called with', options)
+            });
+          });
+        });
+      });
+
       describe('createPortfolio()', function() {
         it('should POST `/portfolios` path', async function() {
           const data = {
@@ -158,7 +218,7 @@ describe('Investment Portfolio', function() {
         });
 
         it('should validate `data`', async function() {
-          await expect(
+          return expect(
             api.createPortfolio({timestamp: new Date()}),
             'to be rejected with',
             /"name" is required/
