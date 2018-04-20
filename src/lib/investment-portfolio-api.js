@@ -19,10 +19,21 @@ const debug = d('ibm-fintech:investment-portfolio');
  * @property {string} timestamp - ISO 9601 date
  */
 
-export const DEFAULT_API_VERSION = 'v1';
-
+/**
+ * Removes keys w/ void values from an Object
+ *
+ * @param {Object} value - "parameters" object to normalize
+ * @returns {Object} `value`, sans keys w/ void values
+ */
 const normalizeParams = _.omitBy(_.isUndefined);
 
+/**
+ * Provides wrapper around Investment Portfolio API
+ *
+ * @export
+ * @class InvestmentPortfolioAPI
+ * @extends {CloudAPI}
+ */
 export class InvestmentPortfolioAPI extends CloudAPI {
   constructor(credentials = {}, options = {}) {
     super(credentials);
@@ -36,7 +47,7 @@ export class InvestmentPortfolioAPI extends CloudAPI {
       throw new Error('invalid/missing credentials');
     }
 
-    this.options = _.defaults({apiVersion: DEFAULT_API_VERSION}, options);
+    this.options = _.defaults({apiVersion: this.defaultApiVersion}, options);
 
     this.readerClient = createClient({
       baseURL: this.url,
@@ -84,8 +95,7 @@ export class InvestmentPortfolioAPI extends CloudAPI {
    * Find one or more Portfolios by name
    * @param {Object} options - See {@link FIND_PORTFOLIO_BY_NAME_SCHEMA}
    * @memberof InvestmentPortfolioAPI
-   * @throws Invalid options
-   * @returns Promise<Portfolio[]> Matching Portfolio(s)
+   * @returns Promise<{{portfolios: Portfolio[]}}> Matching Portfolio(s)
    */
   async findNamedPortfolios(options = {}) {
     let params = attempt(options, schemas.FIND_PORTFOLIO_BY_NAME_SCHEMA);
@@ -127,12 +137,26 @@ export class InvestmentPortfolioAPI extends CloudAPI {
     return {portfolios: res.data.portfolios};
   }
 
+  /**
+   * @todo document
+   *
+   * @param {any} [data={}]
+   * @returns
+   * @memberof InvestmentPortfolioAPI
+   */
   async createPortfolio(data = {}) {
     data = attempt(data, schemas.CREATE_PORTFOLIO_SCHEMA);
     debug('POST /portfolios', data);
     return this.writerClient.post('/portfolios', {data});
   }
 
+  /**
+   * @todo document
+   *
+   * @param {any} [data={}]
+   * @returns
+   * @memberof InvestmentPortfolioAPI
+   */
   async deletePortfolio(data = {}) {
     const {name, timestamp, rev} = attempt(
       data,
@@ -146,10 +170,29 @@ export class InvestmentPortfolioAPI extends CloudAPI {
     );
   }
 
+  /**
+   * @todo implement
+   *
+   * @param {any} data
+   * @memberof InvestmentPortfolioAPI
+   */
   async updatePortfolio(data) {}
 
+  /**
+   * @todo implement
+   *
+   * @param {any} [options={}]
+   * @memberof InvestmentPortfolioAPI
+   */
   async findPortfolioBySelector(options = {}) {}
 
+  /**
+   * @todo document
+   *
+   * @param {any} [options={}]
+   * @returns
+   * @memberof InvestmentPortfolioAPI
+   */
   async findNamedPortfolioBySelector(options = {}) {
     const {portfolioName, selector} = attempt(
       options,
@@ -171,5 +214,9 @@ export class InvestmentPortfolioAPI extends CloudAPI {
       }
       throw err;
     }
+  }
+
+  get defaultApiVersion() {
+    return 'v1';
   }
 }
