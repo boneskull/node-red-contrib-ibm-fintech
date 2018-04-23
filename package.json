@@ -14,10 +14,11 @@
   "license": "Apache-2.0",
   "node-red": {
     "nodes": {
-      "investment-portfolio": "dist/nodes/investment-portfolio.js",
-      "investment-portfolio-read": "dist/nodes/investment-portfolio-read.js",
-      "investment-portfolio-create": "dist/nodes/investment-portfolio-create.js",
-      "predictive-market-scenario": "dist/nodes/predictive-market-scenario.js"
+      "investment-portfolio": "dist/nodes/investment-portfolio-service.js",
+      "portfolio-read": "dist/nodes/portfolio-read.js",
+      "portfolio-create": "dist/nodes/portfolio-create.js",
+      "predictive-market-scenario": "dist/nodes/predictive-market-scenario-service.js",
+      "holdings-read": "dist/nodes/holdings-read.js"
     }
   },
   "devDependencies": {
