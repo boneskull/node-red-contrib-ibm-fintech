@@ -1,5 +1,6 @@
+import {inspect, normalizeArray, normalizeString} from '../lib/utils';
+
 import _ from 'lodash/fp';
-import {inspect} from '../lib/utils';
 
 const parseDate = (date, time) => {
   if (date) {
@@ -8,9 +9,6 @@ const parseDate = (date, time) => {
       : new Date(`${date}T00:00:00.000Z`);
   }
 };
-
-const normalizeString = v =>
-  _.isString(v) && !_.isEmpty(v) ? _.trim(v) : void 0;
 
 /**
  * Creates the {@link InvestmentPortfolioReadNode} Node
@@ -31,13 +29,17 @@ export default function(RED) {
     constructor(config = {}) {
       RED.nodes.createNode(this, config);
 
-      this.config = _.pick(
-        ['portfolioName', 'hasKey', 'hasAnyKey', 'hasNoKey', 'sort', 'limit'],
-        config
-      );
-      this.config.atDate = parseDate(config.date, config.time);
-      this.config.hasKeyValue = normalizeString(config.hasKeyValue);
-      this.config.selector = normalizeString(config.selector);
+      this.config = {
+        portfolioName: normalizeString(config.portfolioName),
+        hasKey: normalizeArray(config.hasKey),
+        hasNoKey: normalizeArray(config.hasNoKey),
+        hasAnyKey: normalizeArray(config.hasAnyKey),
+        hasKeyValue: normalizeString(config.hasKeyValue),
+        selector: normalizeString(config.selector),
+        sort: config.sort,
+        limit: config.limit,
+        atDate: parseDate(config.date, config.time)
+      };
 
       this.service = RED.nodes.getNode(config.service);
 
@@ -45,7 +47,7 @@ export default function(RED) {
       this.trace(inspect`Processed config: ${this.config}`);
 
       this.on('input', async msg => {
-        this.trace(inspect`Message received: ${msg}`);
+        this.debug(inspect`Message received: ${msg}`);
         if (this.service) {
           try {
             let payload = _.isObject(msg.payload) ? msg.payload : {};
@@ -53,9 +55,11 @@ export default function(RED) {
               portfolioName: msg.topic,
               ...this.config
             });
+            // special case: the user might provide a JSON that has a single
+            // property, "selector".  it's considered optional.
             config.selector = _.getOr(
-              'selector.selector',
               config.selector,
+              'selector.selector',
               config
             );
             this.debug(inspect`Computed config: ${config}`);
@@ -78,8 +82,5 @@ export default function(RED) {
     }
   }
 
-  RED.nodes.registerType(
-    'investment-portfolio-read',
-    InvestmentPortfolioReadNode
-  );
+  RED.nodes.registerType('portfolio-read', InvestmentPortfolioReadNode);
 }
