@@ -1,0 +1,51 @@
+<script>
+  RED.nodes.registerType('holdings-read', {
+    category: 'fintech',
+    defaults: {
+      name: {
+        value: null
+      },
+      service: {
+        type: 'investment-portfolio'
+      },
+      portfolioName: {
+        value: ''
+      }
+    },
+    inputs: 1,
+    outputs: 1,
+    color: '#85bb65',
+    paletteLabel: 'holdings',
+    label: function () {
+      return this.name || this.portfolioName || 'holdings';
+    }
+  });
+  </script>
+  
+  <script type="text/x-red" data-template-name="holdings-read">
+    <div class="form-row">
+      <label for="node-input-service"><i class="fa fa-bookmark"></i> Service</label>
+      <input type="text" id="node-input-service"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-portfolioName"><i class="fa fa-book"></i> Portfolio</label>
+      <input type="text" id="node-input-portfolioName" placeholder="(from topic)"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-date"><i class="fa fa-calendar"></i> After Date</label>
+      <input type="date" id="node-input-date"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-time"><i class="fa fa-clock-o"></i> Time</label>
+      <input type="time" id="node-input-time"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-latest"><i class="fa fa-asterisk"></i> Latest?</label>
+      <checkbox id="node-input-latest" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name"/>
+    </div>
+  </script>
+  
