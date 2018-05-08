@@ -1,16 +1,11 @@
+import {
+  inspect,
+  normalizeArray,
+  normalizeString,
+  parseDate
+} from '../lib/utils';
+
 import _ from 'lodash/fp';
-import {inspect} from '../lib/utils';
-
-const parseDate = (date, time) => {
-  if (date) {
-    return time
-      ? new Date(`${date}T${time}Z`)
-      : new Date(`${date}T00:00:00.000Z`);
-  }
-};
-
-const normalizeString = v =>
-  _.isString(v) && !_.isEmpty(v) ? _.trim(v) : void 0;
 
 /**
  * Creates the {@link HoldingsReadNode} Node
@@ -34,8 +29,10 @@ export default function(RED) {
       this.config = _.defaults(
         {latest: 'false'},
         {
-          atDate: parseDate(config.date, config.time),
-          hasKey: _.map(normalizeString, config.hasKey || [])
+          portfolioName: normalizeString(config.portfolioName),
+          latest: config.latest,
+          hasKey: normalizeArray(config.hasKey),
+          atDate: parseDate(config.date, config.time)
         }
       );
 
@@ -54,7 +51,7 @@ export default function(RED) {
               ...this.config
             });
             this.debug(inspect`Computed config: ${config}`);
-            const {holdings} = await this.service.read(this.config);
+            const {holdings} = await this.service.getHoldings(this.config);
             this.debug(inspect`Received holdings: ${holdings}`);
             this.send({
               ...msg,
