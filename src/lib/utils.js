@@ -36,3 +36,17 @@ export const normalizeArray = _.pipe(
     _.map(normalizeString, _.isString(v) ? normalizeString(v).split(',') : v),
   _.reject(_.anyPass([_.isNull, _.isUndefined, _.equals('')]))
 );
+
+/**
+ * Given specifically-formatted date and time strings, return a `Date`
+ * @param {string} [date] - Date in YYYY-MM-DD format.  If omitted, will return `undefined`
+ * @param {string} [time] - Time in 00:00:00.000 format.  If omitted, time will be 00:00:00.000
+ * @returns {Date?} Parsed date
+ */
+export const parseDate = (date, time) => {
+  if (date) {
+    return time
+      ? new Date(`${date}T${time}Z`)
+      : new Date(`${date}T00:00:00.000Z`);
+  }
+};
