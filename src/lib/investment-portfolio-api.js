@@ -103,14 +103,13 @@ export class InvestmentPortfolioAPI extends CloudAPI {
       ? _.pipe(_.entries, _.map(_.join(':')), _.join(','))(params.hasKeyValue)
       : void 0;
     const path = `/portfolios/${options.portfolioName}`;
-    delete params.portfolioName;
-    params = normalizeParams(params);
+    params = normalizeParams(_.omit(['portfolioName'], params));
     debug(`GET /portfolios${path}`, params);
     try {
       const res = await this.readerClient.get(path, {
         params
       });
-      return {portfolios: res.data.portfolio};
+      return {portfolios: _.get('data.portfolio', res)};
     } catch (err) {
       switch (_.get('response.status', err)) {
         case 404:
@@ -123,7 +122,23 @@ export class InvestmentPortfolioAPI extends CloudAPI {
   }
 
   async getHoldings(options = {}) {
-    // let params = attempt(options, schemas.GET_HOLDINGS_SCHEMA);
+    let params = attempt(options, schemas.GET_HOLDINGS_SCHEMA);
+    const path = `/portfolios/${options.portfolioName}/holdings`;
+    params = normalizeParams(_.omit(['portfolioName'], params));
+    debug(`GET /portfolios${path}`, params);
+    try {
+      const res = await this.readerClient.get(path, {params});
+      // yep!
+      return {holdings: _.get('data.holdings[0].holdings', res)};
+    } catch (err) {
+      switch (_.get('response.status', err)) {
+        case 404:
+          throw new Error(
+            `Portfolio with name "${options.portfolioName}" not found!`
+          );
+      }
+      throw err;
+    }
   }
 
   /**

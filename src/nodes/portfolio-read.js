@@ -1,14 +1,11 @@
-import {inspect, normalizeArray, normalizeString} from '../lib/utils';
+import {
+  inspect,
+  normalizeArray,
+  normalizeString,
+  parseDate
+} from '../lib/utils';
 
 import _ from 'lodash/fp';
-
-const parseDate = (date, time) => {
-  if (date) {
-    return time
-      ? new Date(`${date}T${time}Z`)
-      : new Date(`${date}T00:00:00.000Z`);
-  }
-};
 
 /**
  * Creates the {@link InvestmentPortfolioReadNode} Node
@@ -63,7 +60,7 @@ export default function(RED) {
               config
             );
             this.debug(inspect`Computed config: ${config}`);
-            const {portfolios} = await this.service.read(this.config);
+            const {portfolios} = await this.service.findPortfolios(this.config);
             this.debug(inspect`Received portfolios: ${portfolios}`);
             this.send({
               ...msg,

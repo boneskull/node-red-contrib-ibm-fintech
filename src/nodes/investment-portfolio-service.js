@@ -21,9 +21,14 @@ export default function(RED) {
       this.trace(inspect`Config: ${config}`);
     }
 
-    async read(options = {}) {
+    async findPortfolios(options = {}) {
       this.debug(inspect`Reading with options: ${options}`);
       return this.api.findPortfolios(options);
+    }
+
+    async getHoldings(options = {}) {
+      this.debug(inspect`Getting holdings with options ${options}`);
+      return this.api.getHoldings(options);
     }
   }
 
