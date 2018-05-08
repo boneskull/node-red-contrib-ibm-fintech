@@ -164,7 +164,7 @@ export const FIND_PORTFOLIO_BY_NAME_AND_SELECTOR_SCHEMA = Joi.object({
     .example('myPortfolio')
     .description('Name of the portfolio to retrieve'),
   selector: Joi.object()
-    .required()
+    .default({})
     .example({manager: 'Edward Lam'})
 });
 

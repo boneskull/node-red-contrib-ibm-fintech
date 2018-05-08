@@ -219,7 +219,7 @@ export class InvestmentPortfolioAPI extends CloudAPI {
       const res = await this.writerClient.post(path, {
         data: selector
       });
-      return {portfolios: res.data.portfolio};
+      return {portfolios: _.get('data.portfolio', res)};
     } catch (err) {
       switch (_.get('response.status', err)) {
         case 404:

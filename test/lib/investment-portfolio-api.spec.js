@@ -5,7 +5,7 @@ describe('Investment Portfolio', function() {
   let sbx;
 
   beforeEach(function() {
-    sbx = sinon.sandbox.create();
+    sbx = sinon.createSandbox();
   });
 
   afterEach(function() {
@@ -265,6 +265,18 @@ describe('Investment Portfolio', function() {
               `/portfolios/${data.portfolioName}/holdings`,
               {params: {latest: false}}
             ]
+          );
+        });
+      });
+
+      describe('findNamedPortfolioBySelector()', function() {
+        it('should GET `/portfolios/:portfolioName` path', async function() {
+          const data = {portfolioName: 'foo'};
+          await api.findNamedPortfolioBySelector(data);
+          expect(
+            api.writerClient.post,
+            'to have a call exhaustively satisfying',
+            [`/portfolios/${data.portfolioName}`, {data: {}}]
           );
         });
       });
