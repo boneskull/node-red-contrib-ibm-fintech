@@ -227,7 +227,7 @@ describe('Investment Portfolio', function() {
       });
 
       describe('deletePortfolio()', function() {
-        it('should DELETE `/portfolios` path', async function() {
+        it('should DELETE `/portfolios/<name>` path', async function() {
           const data = {name: 'foo', timestamp: new Date()};
           await api.deletePortfolio(data);
           expect(
@@ -249,6 +249,21 @@ describe('Investment Portfolio', function() {
             [
               `/portfolios/${data.name}/${data.timestamp.toISOString()}`,
               {params: {rev: 0}}
+            ]
+          );
+        });
+      });
+
+      describe('getHoldings()', function() {
+        it('should GET `/portfolios/<name>/holdings` path', async function() {
+          const data = {portfolioName: 'foo'};
+          await api.getHoldings(data);
+          expect(
+            api.readerClient.get,
+            'to have a call exhaustively satisfying',
+            [
+              `/portfolios/${data.portfolioName}/holdings`,
+              {params: {latest: false}}
             ]
           );
         });
