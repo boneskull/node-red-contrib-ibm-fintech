@@ -132,7 +132,7 @@ describe('Investment Portfolio', function() {
       describe('findAllPortfolios()', function() {
         it('should GET `/portfolios` path', async function() {
           await api.findAllPortfolios();
-          expect(
+          return expect(
             api.readerClient.get,
             'to have a call exhaustively satisfying',
             ['/portfolios']
@@ -151,7 +151,7 @@ describe('Investment Portfolio', function() {
         describe('when passed neither a `selector` nor `portfolioName` property', function() {
           it('should call `findAllPortfolios()`', async function() {
             await api.findPortfolios();
-            expect(api, 'to satisfy', {
+            return expect(api, 'to satisfy', {
               findAllPortfolios: expect.it('was called with', void 0),
               findNamedPortfolioBySelector: expect.it('was not called'),
               findPortfolioBySelector: expect.it('was not called'),
@@ -164,7 +164,7 @@ describe('Investment Portfolio', function() {
           it('should call `findPortfolioBySelector()`', async function() {
             const options = {selector: {}, portfolioName: 'foo'};
             await api.findPortfolios(options);
-            expect(api, 'to satisfy', {
+            return expect(api, 'to satisfy', {
               findAllPortfolios: expect.it('was not called'),
               findNamedPortfolioBySelector: expect.it(
                 'was called with',
@@ -180,7 +180,7 @@ describe('Investment Portfolio', function() {
           it('should call `findPortfolioBySelector()`', async function() {
             const options = {selector: {}};
             await api.findPortfolios(options);
-            expect(api, 'to satisfy', {
+            return expect(api, 'to satisfy', {
               findAllPortfolios: expect.it('was not called'),
               findNamedPortfolioBySelector: expect.it('was not called'),
               findPortfolioBySelector: expect.it('was called with', options),
@@ -193,7 +193,7 @@ describe('Investment Portfolio', function() {
           it('should call `findPortfolioBySelector()`', async function() {
             const options = {portfolioName: 'foo'};
             await api.findPortfolios(options);
-            expect(api, 'to satisfy', {
+            return expect(api, 'to satisfy', {
               findAllPortfolios: expect.it('was not called'),
               findNamedPortfolioBySelector: expect.it('was not called'),
               findPortfolioBySelector: expect.it('was not called'),
@@ -210,7 +210,7 @@ describe('Investment Portfolio', function() {
             timestamp: new Date()
           };
           await api.createPortfolio(data);
-          expect(
+          return expect(
             api.writerClient.post,
             'to have a call exhaustively satisfying',
             ['/portfolios', {data: {...data, closed: false}}]
@@ -230,7 +230,7 @@ describe('Investment Portfolio', function() {
         it('should DELETE `/portfolios/<name>` path', async function() {
           const data = {name: 'foo', timestamp: new Date()};
           await api.deletePortfolio(data);
-          expect(
+          return expect(
             api.writerClient.delete,
             'to have a call exhaustively satisfying',
             [
@@ -258,7 +258,7 @@ describe('Investment Portfolio', function() {
         it('should GET `/portfolios/<name>/holdings` path', async function() {
           const data = {portfolioName: 'foo'};
           await api.getHoldings(data);
-          expect(
+          return expect(
             api.readerClient.get,
             'to have a call exhaustively satisfying',
             [
@@ -273,7 +273,7 @@ describe('Investment Portfolio', function() {
         it('should GET `/portfolios/:portfolioName` path', async function() {
           const data = {portfolioName: 'foo'};
           await api.findNamedPortfolioBySelector(data);
-          expect(
+          return expect(
             api.writerClient.post,
             'to have a call exhaustively satisfying',
             [`/portfolios/${data.portfolioName}`, {data: {}}]

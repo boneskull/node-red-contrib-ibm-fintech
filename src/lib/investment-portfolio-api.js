@@ -104,7 +104,7 @@ export class InvestmentPortfolioAPI extends CloudAPI {
       : void 0;
     const path = `/portfolios/${options.portfolioName}`;
     params = normalizeParams(_.omit(['portfolioName'], params));
-    debug(`GET /portfolios${path}`, params);
+    debug(`GET ${path}`, params);
     try {
       const res = await this.readerClient.get(path, {
         params
@@ -125,7 +125,7 @@ export class InvestmentPortfolioAPI extends CloudAPI {
     let params = attempt(options, schemas.GET_HOLDINGS_SCHEMA);
     const path = `/portfolios/${options.portfolioName}/holdings`;
     params = normalizeParams(_.omit(['portfolioName'], params));
-    debug(`GET /portfolios${path}`, params);
+    debug(`GET ${path}`, params);
     try {
       const res = await this.readerClient.get(path, {params});
       // yep!

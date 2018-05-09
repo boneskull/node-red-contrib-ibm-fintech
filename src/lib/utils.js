@@ -32,9 +32,9 @@ export const normalizeString = v =>
  * @returns {string[]} Array, may be empty
  */
 export const normalizeArray = _.pipe(
-  v =>
-    _.map(normalizeString, _.isString(v) ? normalizeString(v).split(',') : v),
-  _.reject(_.anyPass([_.isNull, _.isUndefined, _.equals('')]))
+  v => _.map(normalizeString, _.isString(v) ? _.trim(v).split(',') : v),
+  _.reject(_.anyPass([_.isNull, _.isUndefined, _.equals('')])),
+  v => (_.isEmpty(v) ? void 0 : v)
 );
 
 /**

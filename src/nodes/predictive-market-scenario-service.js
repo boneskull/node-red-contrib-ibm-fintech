@@ -1,17 +1,24 @@
 import {PredictiveMarketScenarioAPI} from '../lib/predictive-market-scenario-api';
+import _ from 'lodash/fp';
+import factors from '../lib/factors.json';
 import {inspect} from '../lib/utils';
+
+const prepareFactors = _.pipe(_.filter({category: 'Index'}, _.sortBy('name')));
 
 export default function(RED) {
   class PredictiveMarketScenarioServiceNode {
     constructor(config = {}) {
       RED.nodes.createNode(this, config);
-
       this.api = new PredictiveMarketScenarioAPI({
-        token: this.credentials.token,
-        url: config.host
+        accessToken: this.credentials.token,
+        uri: config.host
       });
 
       this.trace(inspect`Config: ${config}`);
+    }
+
+    async generate(options = {}) {
+      return this.api.generate(options);
     }
   }
 
@@ -26,4 +33,8 @@ export default function(RED) {
       }
     }
   );
+
+  RED.httpAdmin.get('/predictive-market-scenario/factors', (req, res) => {
+    res.json(prepareFactors(factors));
+  });
 }

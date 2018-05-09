@@ -12,6 +12,7 @@
   "plugins": [
     "add-module-exports",
     ["transform-object-rest-spread", {"useBuiltIns": true}],
-    "transform-runtime"
+    "transform-runtime",
+    "inline-json-import"
   ]
 }

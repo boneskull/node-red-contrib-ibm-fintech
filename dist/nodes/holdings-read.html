@@ -10,6 +10,18 @@
       },
       portfolioName: {
         value: ''
+      },
+      date: {
+        value: null
+      },
+      time: {
+        value: null
+      },
+      hasKey: {
+        value: ''
+      },
+      latest: {
+        value: false
       }
     },
     inputs: 1,
@@ -38,6 +50,10 @@
     <div class="form-row">
       <label for="node-input-time"><i class="fa fa-clock-o"></i> Time</label>
       <input type="time" id="node-input-time"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-hasKey"><i class="fa fa-clock-o"></i> Has Key(s)</label>
+      <input type="text" id="node-input-hasKey"/>
     </div>
     <div class="form-row">
       <label for="node-input-latest"><i class="fa fa-asterisk"></i> Latest?</label>

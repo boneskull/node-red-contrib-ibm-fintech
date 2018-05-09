@@ -60,7 +60,6 @@ RED.nodes.registerType('portfolio-read', {
       mode: 'ace/mode/json',
       value: $('#node-input-selector').val()
     });
-
   }
 });
 </script>
@@ -81,6 +80,10 @@ RED.nodes.registerType('portfolio-read', {
   <div class="form-row">
     <label for="node-input-time"><i class="fa fa-clock-o"></i> Time</label>
     <input type="time" id="node-input-time"/>
+  </div>
+  <div class="form-row">
+    <label for="node-input-hasKey"><i class="fa fa-clock-o"></i> Has Key(s)</label>
+    <input type="text" id="node-input-hasKey"/>
   </div>
   <div class="form-row" style="position: relative; margin-bottom: 0px;">
     <label for="node-input-selector"><i class="fa fa-file-code-o"></i> Selector (JSON)</label>

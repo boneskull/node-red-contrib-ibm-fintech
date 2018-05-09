@@ -39,7 +39,7 @@ export class SimulatedInstrumentAnalyticsAPI extends ScenarioAPI {
   /**
    * Instruments
    *
-   * @param {any} id
+   * @param {string} id
    * @param {any} model
    * @returns
    * @memberof SimulatedInstrumentAnalyticsAPI

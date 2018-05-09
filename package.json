@@ -19,12 +19,14 @@
       "portfolio-read": "dist/nodes/portfolio-read.js",
       "portfolio-create": "dist/nodes/portfolio-create.js",
       "predictive-market-scenario": "dist/nodes/predictive-market-scenario-service.js",
-      "holdings-read": "dist/nodes/holdings-read.js"
+      "holdings-read": "dist/nodes/holdings-read.js",
+      "predict": "dist/nodes/predict.js"
     }
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-inline-json-import": "^0.2.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",

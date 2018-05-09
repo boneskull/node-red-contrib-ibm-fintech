@@ -1,0 +1,102 @@
+<script>
+  RED.nodes.registerType('predict', {
+    category: 'fintech',
+    defaults: {
+      name: {
+        value: null
+      },
+      portfolioService: {
+        type: 'investment-portfolio'
+      },
+      scenarioService: {
+        type: 'predictive-market-scenario'
+      },
+      portfolioName: {
+        value: ''
+      },
+      date: {
+        value: null
+      },
+      time: {
+        value: null
+      },
+      hasKey: {
+        value: ''
+      },
+      latest: {
+        value: false
+      },
+      shock: {
+        value: 5
+      },
+      factor: {
+        value: '',
+        required: true
+      }
+    },
+    inputs: 1,
+    outputs: 1,
+    color: '#85bb65',
+    paletteLabel: 'predict',
+    label: function () {
+      return this.name || this.portfolioName || 'predict';
+    },
+    oneditprepare: function() {
+      var selectedFactorId = this.factor;
+      $.getJSON('/predictive-market-scenario/factors')
+        .done(function (factors) {
+          var $select = $('#node-input-factor');
+          $select.append.apply($select, factors.map(function (factor) {
+            return $('<option/>').val(factor.id)
+              .text(factor.name);
+          }));
+          $select.val(selectedFactorId);
+      });
+    }
+  });
+  </script>
+  
+  <script type="text/x-red" data-template-name="predict">
+    <div class="form-row">
+      <label for="node-input-portfolioService"><i class="fa fa-bookmark"></i> Portfolio Service</label>
+      <input type="text" id="node-input-portfolioService"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-scenarioService"><i class="fa fa-bookmark"></i> Scenario Service</label>
+      <input type="text" id="node-input-scenarioService"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-portfolioName"><i class="fa fa-book"></i> Portfolio</label>
+      <input type="text" id="node-input-portfolioName" placeholder="(from topic)"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-shock"><i class="fa fa-bolt"></i> Shock</label>
+      <input style="width: 30%" type="number" id="node-input-shock" placeholder="5"/>%
+    </div>
+    <div class="form-row">
+      <label for="node-input-factor"><i class="fa fa-balance-scale"></i> Risk Factor</label>
+      <select style="width: 70%" id="node-input-factor">
+      </select>
+    </div>
+    <div class="form-row">
+      <label for="node-input-date"><i class="fa fa-calendar"></i> After Date</label>
+      <input type="date" id="node-input-date"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-time"><i class="fa fa-clock-o"></i> Time</label>
+      <input type="time" id="node-input-time"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-hasKey"><i class="fa fa-key"></i> Has Key(s)</label>
+      <input type="text" id="node-input-hasKey"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-latest"><i class="fa fa-asterisk"></i> Latest?</label>
+      <input type="checkbox" id="node-input-latest" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name"/>
+    </div>
+  </script>
+  

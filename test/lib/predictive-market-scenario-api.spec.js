@@ -5,7 +5,7 @@ describe('Predictive Market Scenario', function() {
   let sbx;
 
   beforeEach(function() {
-    sbx = sinon.sandbox.create();
+    sbx = sinon.createSandbox();
   });
 
   afterEach(function() {
@@ -88,12 +88,12 @@ describe('Predictive Market Scenario', function() {
 
       describe('generate()', function() {
         it('should POST `/generate_predictive` path', async function() {
-          const riskId = 'foobar';
+          const factor = 'CX_COS_ME_Gold_XCEC';
           const shock = 0.2;
-          await api.generate(riskId, shock);
+          await api.generate({factor, shock});
           expect(api.client.post, 'to have a call exhaustively satisfying', [
             `/generate_predictive`,
-            {data: {risk_factor: riskId, shock}, headers: {accept: 'text/csv'}}
+            {data: {risk_factor: factor, shock}, headers: {accept: 'text/csv'}}
           ]);
         });
 
