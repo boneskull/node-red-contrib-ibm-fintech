@@ -1,542 +1,58 @@
 [
   {
-    "id": "CX_COS_EN_BrentCrude_IFEU",
-    "name": "Spot Price of Brent Crude Oil",
-    "category": "Macroeconomic",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_COS_EN_WTICrude_IFEU",
-    "name": "Spot Price of WTI Crude",
-    "category": "Macroeconomic",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_COS_ME_Gold_XCEC",
-    "name": "Spot Price of Gold",
-    "category": "Macroeconomic",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_BMK_AA_MD",
-    "name": "Benchmark AA",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "AA",
-    "sector": "Benchmark"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_BMK_BBB_MD",
-    "name": "Benchmark BBB",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "BBB",
-    "sector": "Benchmark"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_BMK_CCC_MD",
-    "name": "Benchmark CCC",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "CCC",
-    "sector": "Benchmark"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_BNK_AA_MD",
-    "name": "Bank AA",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "AA",
-    "sector": "Bank"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_BNK_BBB_MD",
-    "name": "Bank BBB",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": true,
-    "rating": "BBB",
-    "sector": "Bank"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_BNK_CCC_MD",
-    "name": "Bank CCC",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "CCC",
-    "sector": "Bank"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_CPG_AA_MD",
-    "name": "Capital Goods AA",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "AA",
-    "sector": "Capital Goods"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_CPG_BBB_MD",
-    "name": "Capital Goods BBB",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "BBB",
-    "sector": "Capital Goods"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_CPG_CCC_MD",
-    "name": "Capital Goods CCC",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "CCC",
-    "sector": "Capital Goods"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_ENE_AA_MD",
-    "name": "Energy AA",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "AA",
-    "sector": "Energy"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_ENE_BBB_MD",
-    "name": "Energy BBB",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "BBB",
-    "sector": "Energy"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_ENE_CCC_MD",
-    "name": "Energy CCC",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "CCC",
-    "sector": "Energy"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_SVC_AA_MD",
-    "name": "Software and Services AA",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": true,
-    "rating": "AA",
-    "sector": "Software and Services"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_SVC_BBB_MD",
-    "name": "Software and Services BBB",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "BBB",
-    "sector": "Software and Services"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_SVC_CCC_MD",
-    "name": "Software and Services CCC",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "CCC",
-    "sector": "Software and Services"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_TEL_AA_MD",
-    "name": "Telecommunications AA",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "AA",
-    "sector": "Telecommunications"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_TEL_BBB_MD",
-    "name": "Telecommunications BBB",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "BBB",
-    "sector": "Telecommunications"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_TEL_CCC_MD",
-    "name": "Telecommunications CCC",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "CCC",
-    "sector": "Telecommunications"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_TRA_AA_MD",
-    "name": "Transportation AA",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "AA",
-    "sector": "Transportation"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_TRA_BBB_MD",
-    "name": "Transportation BBB",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "BBB",
-    "sector": "Transportation"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_TRA_CCC_MD",
-    "name": "Transportation CCC",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "CCC",
-    "sector": "Transportation"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_UTL_AA_MD",
-    "name": "Utility Power AA",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "AA",
-    "sector": "Utility Power"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_UTL_BBB_MD",
-    "name": "Utility Power BBB",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "BBB",
-    "sector": "Utility Power"
-  },
-  {
-    "id": "CX_CSC_RSD_SEN_UTL_CCC_MD",
-    "name": "Utility Power CCC",
-    "category": "Credit Spread",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": "CCC",
-    "sector": "Utility Power"
-  },
-  {
-    "id": "CX_EQI_AUSX_Sydney_BMK_AUD_LargeCap_Price",
-    "name": "ASX All Ordinaries Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_EQI_BMFX_SaoPaulo_BMK_BRL_LargeCap_TotalReturn",
-    "name": "Sao Paulo SE Bovespa Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_EQI_FTSE_UK_BMK_GBP_LargeCap_Price",
-    "name": "FTSE 100 Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_EQI_HSNG_Asia_BMK_HKD_LargeCap_Price",
-    "name": "Hang Seng Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_EQI_NASD_USA100_BMK_USD_LargeCap_Price",
-    "name": "NASDAQ 100 Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_EQI_NASD_USAComposite_BMK_USD_LargeCap_Price",
-    "name": "NASDAQ Composite Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_EQI_NIKK_Asia_BMK_JPY_LargeCap_Price",
-    "name": "Nikkei 225 Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_EQI_NYSE_CAC40_BMK_EUR_LargeCap_Price",
-    "name": "CAC 40 Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_EQI_SPDJ_USA500_BMK_USD_LargeCap_Price",
+    "name": "S&P 500 Index"
   },
   {
     "id": "CX_EQI_NYSE_USA_BMK_USD_LargeCap_Price",
-    "name": "NYSE MKT Composite Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "name": "NYSE MKT Composite Index"
   },
   {
-    "id": "CX_EQI_SPDJ_Toronto_BMK_CAD_LargeCap_Price",
-    "name": "TSX-Toronto Stock Exchange 300 Composite Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_EQI_NASD_USAComposite_BMK_USD_LargeCap_Price",
+    "name": "NASDAQ Composite Index"
   },
   {
-    "id": "CX_EQI_SPDJ_USA500TotalReturn_BMK_USD_LargeCap_Gross",
-    "name": "S&P 500 Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_EQI_NYSE_CAC40_BMK_EUR_LargeCap_Price",
+    "name": "CAC 40 Index"
   },
   {
-    "id": "CX_EQI_SPDJ_USA500_BMK_USD_LargeCap_Price",
-    "name": "S&P 500 Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_EQI_NIKK_Asia_BMK_JPY_LargeCap_Price",
+    "name": "Nikkei 225 Index"
   },
   {
-    "id": "CX_EQI_SPDJ_USA_BMK_USD_LargeCap_Price",
-    "name": "CBOE Market Volatility Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_EQI_HSNG_Asia_BMK_HKD_LargeCap_Price",
+    "name": "Hang Seng Index"
   },
   {
-    "id": "CX_EQI_STOX_Euro_BMK_EUR_MidCap_Price",
-    "name": "EURO STOXX Mid EUR Price Index",
-    "category": "Index",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_FXC_AUD_USD_Spot",
-    "name": "AUD/USD Rate",
-    "category": "FX",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_FXC_BRL_USD_Spot",
-    "name": "BRL/USD Rate",
-    "category": "FX",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_FXC_CAD_USD_Spot",
-    "name": "CAD/USD Rate",
-    "category": "FX",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_FXC_CHF_USD_Spot",
-    "name": "CHF/USD Rate",
-    "category": "FX",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_EQI_FTSE_UK_BMK_GBP_LargeCap_Price",
+    "name": "FTSE 100 Index"
   },
   {
     "id": "CX_FXC_EUR_USD_Spot",
-    "name": "EUR/USD Rate",
-    "category": "FX",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_FXC_GBP_USD_Spot",
-    "name": "GBP/USD Rate",
-    "category": "FX",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
-  },
-  {
-    "id": "CX_FXC_HKD_USD_Spot",
-    "name": "HKD/USD Rate",
-    "category": "FX",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "name": "EUR/USD FX rate"
   },
   {
     "id": "CX_FXC_JPY_USD_Spot",
-    "name": "JPY/USD Rate",
-    "category": "FX",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "name": "JPY/USD FX rate"
   },
   {
-    "id": "CX_FXC_RUB_USD_Spot",
-    "name": "RUB/USD Rate",
-    "category": "FX",
-    "has_tenor": false,
-    "tenor": null,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_FXC_CAD_USD_Spot",
+    "name": "CAD/USD FX rate"
   },
   {
-    "id": "CX_IRC_IBK_USD_USD_MD",
-    "name": "USD Interbank Curve",
-    "category": "Rates",
-    "has_tenor": true,
-    "tenor": 365,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_FXC_GBP_USD_Spot",
+    "name": "GBP/USD  FX rate"
   },
   {
-    "id": "CX_IRC_IBK_USD_USD_MD",
-    "name": "USD Interbank Curve",
-    "category": "Rates",
-    "has_tenor": true,
-    "tenor": 730,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_COS_EN_BrentCrude_IFEU",
+    "name": "spot price of Brent Crude Oil"
   },
   {
-    "id": "CX_IRC_IBK_USD_USD_MD",
-    "name": "USD Interbank Curve",
-    "category": "Rates",
-    "has_tenor": true,
-    "tenor": 1460,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_COS_EN_WTICrude_IFEU",
+    "name": "spot price of WTI Crude Oil"
   },
   {
-    "id": "CX_IRC_IBK_USD_USD_MD",
-    "name": "USD Interbank Curve",
-    "category": "Rates",
-    "has_tenor": true,
-    "tenor": 3650,
-    "portfolio_factor": false,
-    "rating": null,
-    "sector": null
+    "id": "CX_COS_ME_Gold_XCEC",
+    "name": "spot price of Gold"
   }
- ]
+]

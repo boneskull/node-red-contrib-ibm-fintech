@@ -1,15 +1,18 @@
 <script>
-  RED.nodes.registerType('predict', {
+  RED.nodes.registerType('stress-test', {
     category: 'fintech',
     defaults: {
       name: {
         value: null
       },
-      portfolioService: {
+      investmentPortfolioService: {
         type: 'investment-portfolio'
       },
-      scenarioService: {
+      predictiveMarketScenarioService: {
         type: 'predictive-market-scenario'
+      },
+      simulatedInstrumentAnalyticsService: {
+        type: 'simulated-instrument-analytics'
       },
       portfolioName: {
         value: ''
@@ -37,9 +40,9 @@
     inputs: 1,
     outputs: 1,
     color: '#85bb65',
-    paletteLabel: 'predict',
+    paletteLabel: 'stress test',
     label: function () {
-      return this.name || this.portfolioName || 'predict';
+      return this.name || this.portfolioName || 'Stress Test';
     },
     oneditprepare: function() {
       var selectedFactorId = this.factor;
@@ -56,14 +59,18 @@
   });
   </script>
   
-  <script type="text/x-red" data-template-name="predict">
+  <script type="text/x-red" data-template-name="stress-test">
     <div class="form-row">
-      <label for="node-input-portfolioService"><i class="fa fa-bookmark"></i> Portfolio Service</label>
-      <input type="text" id="node-input-portfolioService"/>
+      <label for="node-input-investmentPortfolioService"><i class="fa fa-bookmark"></i> Portfolio Service</label>
+      <input type="text" id="node-input-investmentPortfolioService"/>
     </div>
     <div class="form-row">
-      <label for="node-input-scenarioService"><i class="fa fa-bookmark"></i> Scenario Service</label>
-      <input type="text" id="node-input-scenarioService"/>
+      <label for="node-input-predictiveMarketScenarioService"><i class="fa fa-bookmark"></i> Scenario Service</label>
+      <input type="text" id="node-input-predictiveMarketScenarioService"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-simulatedInstrumentAnalyticsService"><i class="fa fa-bookmark"></i> Analytics Service</label>
+      <input type="text" id="node-input-simulatedInstrumentAnalyticsService"/>
     </div>
     <div class="form-row">
       <label for="node-input-portfolioName"><i class="fa fa-book"></i> Portfolio</label>

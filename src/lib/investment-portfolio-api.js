@@ -1,11 +1,12 @@
 import * as schemas from './investment-portfolio-schema';
 
+import {makeHTTPSURL, validateParam} from './utils';
+
 import {CloudAPI} from './cloud-api';
 import _ from 'lodash/fp';
-import {attempt} from 'joi';
+import axiosDebugLog from 'axios-debug-log';
 import {create as createClient} from 'axios';
 import d from 'debug';
-import {makeHTTPSURL} from './utils';
 import {resolve} from 'url';
 
 const debug = d('ibm-fintech:investment-portfolio');
@@ -64,6 +65,9 @@ export class InvestmentPortfolioAPI extends CloudAPI {
         password: this.credentials.writer.password
       }
     });
+
+    axiosDebugLog.addLogger(this.readerClient, debug);
+    axiosDebugLog.addLogger(this.writerClient, debug);
   }
 
   get serviceName() {
@@ -98,13 +102,12 @@ export class InvestmentPortfolioAPI extends CloudAPI {
    * @returns Promise<{{portfolios: Portfolio[]}}> Matching Portfolio(s)
    */
   async findNamedPortfolios(options = {}) {
-    let params = attempt(options, schemas.FIND_PORTFOLIO_BY_NAME_SCHEMA);
+    let params = validateParam(schemas.FIND_PORTFOLIO_BY_NAME_SCHEMA, options);
     params.hasKeyValue = params.hasKeyValue
       ? _.pipe(_.entries, _.map(_.join(':')), _.join(','))(params.hasKeyValue)
       : void 0;
     const path = `/portfolios/${options.portfolioName}`;
     params = normalizeParams(_.omit(['portfolioName'], params));
-    debug(`GET ${path}`, params);
     try {
       const res = await this.readerClient.get(path, {
         params
@@ -122,10 +125,9 @@ export class InvestmentPortfolioAPI extends CloudAPI {
   }
 
   async getHoldings(options = {}) {
-    let params = attempt(options, schemas.GET_HOLDINGS_SCHEMA);
+    let params = validateParam(schemas.GET_HOLDINGS_SCHEMA, options);
     const path = `/portfolios/${options.portfolioName}/holdings`;
     params = normalizeParams(_.omit(['portfolioName'], params));
-    debug(`GET ${path}`, params);
     try {
       const res = await this.readerClient.get(path, {params});
       // yep!
@@ -147,7 +149,6 @@ export class InvestmentPortfolioAPI extends CloudAPI {
    * @returns Promise<Portfolio[]> All portfolios
    */
   async findAllPortfolios() {
-    debug('GET /portfolios');
     const res = await this.readerClient.get('/portfolios');
     return {portfolios: res.data.portfolios};
   }
@@ -160,8 +161,7 @@ export class InvestmentPortfolioAPI extends CloudAPI {
    * @memberof InvestmentPortfolioAPI
    */
   async createPortfolio(data = {}) {
-    data = attempt(data, schemas.CREATE_PORTFOLIO_SCHEMA);
-    debug('POST /portfolios', data);
+    data = validateParam(schemas.CREATE_PORTFOLIO_SCHEMA, data);
     return this.writerClient.post('/portfolios', {data});
   }
 
@@ -173,9 +173,9 @@ export class InvestmentPortfolioAPI extends CloudAPI {
    * @memberof InvestmentPortfolioAPI
    */
   async deletePortfolio(data = {}) {
-    const {name, timestamp, rev} = attempt(
-      data,
-      schemas.DELETE_PORTFOLIO_SCHEMA
+    const {name, timestamp, rev} = validateParam(
+      schemas.DELETE_PORTFOLIO_SCHEMA,
+      data
     );
     return this.writerClient.delete(
       `/portfolios/${name}/${timestamp.toISOString()}`,
@@ -209,12 +209,11 @@ export class InvestmentPortfolioAPI extends CloudAPI {
    * @memberof InvestmentPortfolioAPI
    */
   async findNamedPortfolioBySelector(options = {}) {
-    const {portfolioName, selector} = attempt(
-      options,
-      schemas.FIND_PORTFOLIO_BY_NAME_AND_SELECTOR_SCHEMA
+    const {portfolioName, selector} = validateParam(
+      schemas.FIND_PORTFOLIO_BY_NAME_AND_SELECTOR_SCHEMA,
+      options
     );
     const path = `/portfolios/${portfolioName}`;
-    debug(`POST ${path}`, selector);
     try {
       const res = await this.writerClient.post(path, {
         data: selector

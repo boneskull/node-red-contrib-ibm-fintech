@@ -2,7 +2,7 @@
   (function () {
     var DEFAULT_HOST = 'fss-analytics.mybluemix.net';
 
-    RED.nodes.registerType('predictive-market-scenario', {
+    RED.nodes.registerType('simulated-instrument-analytics', {
       category: 'config',
       defaults: {
         name: {
@@ -19,7 +19,7 @@
         }
       },
       label: function () {
-        return this.name || this.host || 'Predictive Market Scenario';
+        return this.name || this.host || 'Simulated Instrument Analytics';
       },
       /**
        * Prepare editor panel
@@ -32,7 +32,7 @@
   }());
 </script>
 
-<script type="text/x-red" data-template-name="predictive-market-scenario">
+<script type="text/x-red" data-template-name="simulated-instrument-analytics">
   <div class="form-row">
     <label for="node-config-input-host">
       <i class="fa fa-bookmark"></i> Host</label>

@@ -3,8 +3,6 @@ import _ from 'lodash/fp';
 import factors from '../lib/factors.json';
 import {inspect} from '../lib/utils';
 
-const prepareFactors = _.pipe(_.filter({category: 'Index'}, _.sortBy('name')));
-
 export default function(RED) {
   class PredictiveMarketScenarioServiceNode {
     constructor(config = {}) {
@@ -35,6 +33,6 @@ export default function(RED) {
   );
 
   RED.httpAdmin.get('/predictive-market-scenario/factors', (req, res) => {
-    res.json(prepareFactors(factors));
+    res.json(_.sortBy('name', factors));
   });
 }

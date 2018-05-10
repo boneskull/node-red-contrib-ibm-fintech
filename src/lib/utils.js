@@ -1,5 +1,7 @@
 import _ from 'lodash/fp';
+import {attempt} from 'joi';
 import prependHTTP from 'prepend-http';
+import stripAnsi from 'strip-ansi';
 import {inspect as utilInspect} from 'util';
 
 /**
@@ -48,5 +50,20 @@ export const parseDate = (date, time) => {
     return time
       ? new Date(`${date}T${time}Z`)
       : new Date(`${date}T00:00:00.000Z`);
+  }
+};
+
+/**
+ * Wraps {@link Joi.attempt}
+ * @param {Schema} schema - Joi schema
+ * @param {*} value - Value to validate against schema
+ * @throws {ValidationError}
+ */
+export const validateParam = (schema, value) => {
+  try {
+    return attempt(value, schema);
+  } catch (err) {
+    err.message = stripAnsi(err.message);
+    throw err;
   }
 };

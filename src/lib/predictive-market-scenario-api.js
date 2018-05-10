@@ -1,8 +1,9 @@
 import * as schemas from './predictive-market-scenario-schema';
 
 import {ScenarioAPI} from './scenario-api';
-import {attempt} from 'joi';
+import axiosDebugLog from 'axios-debug-log';
 import d from 'debug';
+import {validateParam} from './utils';
 
 const debug = d('ibm-fintech:predictive-market-scenario');
 
@@ -14,6 +15,11 @@ const debug = d('ibm-fintech:predictive-market-scenario');
  * @extends {ScenarioAPI}
  */
 export class PredictiveMarketScenarioAPI extends ScenarioAPI {
+  constructor(...args) {
+    super(...args);
+
+    axiosDebugLog.addLogger(this.client, debug);
+  }
   /**
    * Returns service name per `VCAP_SERVICES`
    *
@@ -34,10 +40,9 @@ export class PredictiveMarketScenarioAPI extends ScenarioAPI {
    * @memberof PredictiveMarketScenarioAPI
    */
   async generate(options = {}) {
-    options = attempt(options, schemas.GENERATE_SCHEMA);
+    options = validateParam(schemas.GENERATE_SCHEMA, options);
     const {factor, shock} = options;
     const data = {market_change: {risk_factor: factor, shock}};
-    debug(`POST /generate_predictive`, data);
     const res = await this.client.post('/generate_predictive', data, {
       headers: {
         accept: 'text/csv',

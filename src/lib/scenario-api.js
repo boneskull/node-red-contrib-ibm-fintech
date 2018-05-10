@@ -1,12 +1,8 @@
 import {CloudAPI} from './cloud-api';
 import _ from 'lodash/fp';
-// import {attempt} from 'joi';
 import {create as createClient} from 'axios';
 import {makeHTTPSURL} from './utils';
-// import d from 'debug';
 import {resolve} from 'url';
-
-// const debug = d('ibm-fintech:predictive-market-scenario');
 
 /**
  * Credentials in VCAP_SERVICES format

@@ -17,10 +17,10 @@
     "nodes": {
       "investment-portfolio": "dist/nodes/investment-portfolio-service.js",
       "portfolio-read": "dist/nodes/portfolio-read.js",
-      "portfolio-create": "dist/nodes/portfolio-create.js",
       "predictive-market-scenario": "dist/nodes/predictive-market-scenario-service.js",
       "holdings-read": "dist/nodes/holdings-read.js",
-      "predict": "dist/nodes/predict.js"
+      "stress-test": "dist/nodes/stress-test.js",
+      "simulated-instrument-analytics": "dist/nodes/simulated-instrument-analytics-service.js"
     }
   },
   "devDependencies": {
@@ -53,11 +53,15 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "axios-debug-log": "^0.4.0",
     "common-tags": "^1.7.2",
     "debug": "^3.1.0",
+    "form-data": "^2.3.2",
     "joi": "^13.3.0",
     "lodash": "^4.17.10",
     "prepend-http": "^2.0.0",
+    "safe-buffer": "^5.1.2",
+    "strip-ansi": "^4.0.0",
     "vcap_services": "^0.3.4"
   },
   "lint-staged": {
