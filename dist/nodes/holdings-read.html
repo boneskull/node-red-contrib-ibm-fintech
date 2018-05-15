@@ -1,6 +1,6 @@
 <script>
   RED.nodes.registerType('holdings-read', {
-    category: 'fintech',
+    category: 'IBM FinTech',
     defaults: {
       name: {
         value: null
@@ -30,7 +30,8 @@
     paletteLabel: 'holdings',
     label: function () {
       return this.name || this.portfolioName || 'holdings';
-    }
+    },
+    icon: 'holdings.png'
   });
   </script>
   
