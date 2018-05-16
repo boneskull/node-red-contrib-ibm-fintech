@@ -7,8 +7,6 @@ import d from 'debug';
 
 const debug = d('ibm-fintech:simulated-instrument-analytics');
 
-const getAnalytics = _.get('data.analytics');
-
 /**
  * Provides wrapper around Simulated Instrument Analytics API
  *
@@ -57,10 +55,10 @@ export class SimulatedInstrumentAnalyticsAPI extends ScenarioAPI {
     const {id, scenario} = options;
     const formData = SimulatedInstrumentAnalyticsAPI.createFormData(scenario);
     try {
-      const res = await this.client.post(`/instrument/${id}`, formData, {
+      const {data} = await this.client.post(`/instrument/${id}`, formData, {
         headers: formData.getHeaders()
       });
-      return {analytics: getAnalytics(res)};
+      return {analytics: data};
     } catch (err) {
       switch (_.get('response.status', err)) {
         case 404:
@@ -84,10 +82,10 @@ export class SimulatedInstrumentAnalyticsAPI extends ScenarioAPI {
       scenario,
       ids
     );
-    const res = await this.client.post('/instruments', formData, {
+    const {data} = await this.client.post('/instruments', formData, {
       headers: formData.getHeaders()
     });
-    return {analytics: getAnalytics(res)};
+    return {analytics: data};
   }
 
   get defaultApiVersion() {

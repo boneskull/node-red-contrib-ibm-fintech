@@ -65,13 +65,7 @@ export default function(RED) {
         this.debug(inspect`Message received: ${msg}`);
         if (this.stressTest) {
           try {
-            const config = _.defaults(
-              _.isObject(msg.payload) ? msg.payload : {},
-              {
-                factor: msg.topic,
-                ...this.config
-              }
-            );
+            const config = _.defaults(this.config, msg.payload);
             this.debug(inspect`Computed config: ${config}`);
             let shape = 'ring';
             const progress = setInterval(() => {

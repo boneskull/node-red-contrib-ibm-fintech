@@ -61,10 +61,10 @@ export default function(RED) {
             );
             this.debug(inspect`Computed config: ${config}`);
             const {portfolios} = await this.service.findPortfolios(this.config);
-            this.debug(inspect`Received portfolios: ${portfolios}`);
+            this.debug(inspect`Received ${portfolios.length} portfolios`);
             this.send({
               ...msg,
-              payload: portfolios.shift()
+              payload: portfolios
             });
           } catch (err) {
             this.error(err, msg);
