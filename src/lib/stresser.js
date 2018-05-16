@@ -1,9 +1,23 @@
 import _ from 'lodash/fp';
 import csvParse from 'csv-parse';
 import d from 'debug';
-import factors from 'factors.json';
+import factors from './factors.json';
 
 const debug = d('ibm-fintech:stresser');
+
+/**
+ * Set of unique factor IDs as present in `factors.json`
+ * @type {Set<string>}
+ */
+const factorIds = new Set(_.map('id', factors));
+
+/**
+ * Return `true` if row represents a stress shift
+ * @see https://github.com/IBM/Predictive-Market-Stress-Testing/blob/master/run.py#L148
+ * @param {string[]} row - Scenario CSV row
+ */
+const hasStressShift = row =>
+  row.length > 14 && factorIds.has(row[5]) && row[13] !== '1';
 
 /**
  * Given three Service instances, returns a function to execute an
@@ -53,7 +67,7 @@ export const Stresser = ({
     new Promise((resolve, reject) => {
       csvParse(
         scenario,
-        {relax_column_count: true, cast: true, columns: true, trim: true},
+        {relax_column_count: true, delimiter: ','},
         (err, result) => {
           if (err) {
             return reject(err);
@@ -82,11 +96,11 @@ export const Stresser = ({
       analytics
     ),
     conditions: _.reduce(
-      (acc, scen) =>
-        scen['Scenario Shift Rule'] !== 1
+      (acc, row) =>
+        hasStressShift(row)
           ? acc.concat({
-              factor: scen['ScenVar'],
-              stressShift: scen['Scenario Shift Rule']
+              factor: row[5],
+              stressShift: row[13]
             })
           : acc,
       [],
