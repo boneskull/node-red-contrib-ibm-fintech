@@ -30,7 +30,7 @@
           value: null
         },
         limit: {
-          value: 1
+          value: null
         },
         sort: {
           value: 'asc'
@@ -156,4 +156,48 @@
     <input type="text" id="node-input-name" placeholder="Name"/>
   </div>
 </div>
+</script>
+
+<script type="text/x-red" data-help-name="portfolio-read">
+  <p>Reads Investment Portfolio data from an IBM Investment Portfolio service instance.</p>
+  
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt class="optional">portfolioName <span class="property-type">string</span>
+    </dt>
+    <dd>Name of the Investment Portfolio to find.</dd>
+
+    <dt class="optional">hasKey <span class="property-type">string[]</span></dt>
+    <dd>Filter result by portfolios having <strong>all</strong> of the properties within this array.</dd>
+
+    <dt class="optional">hasNoKey <span class="property-type">string[]</span></dt>
+    <dd>Filter result by portfolios having <strong>none</strong> of the properties within this array.</dd>
+
+    <dt class="optional">selector <span class="property-type">object | JSON</span></dt>
+    <dd>Cloudant query selector for advanced search.</dd>
+
+    <dt class="optional">atDate <span class="property-type">string | Date</span></dt>
+    <dd>Filter result by portfolios having this date.  Must be ISO-8601-compliant string (e.g., "2018-01-01T00:00:00Z") or JavaScript Date object.</dd>
+
+    <!-- TODO: "limit" and "sort" properties are unsupported by UI but can be specified -->
+  </dl>
+  
+   <h3>Outputs</h3>
+    <ol class="node-ports">
+      <li>Standard output
+        <dl class="message-properties">
+          <dt>portfolios <span class="property-type">object[]</span></dt>
+          <dd>An array of portfolio objects having properties `name`, `timestamp`, and `closed`.</dd>
+        </dl>
+      </li>
+    </ol>
+  
+  <h3>Details</h3>
+    <p>Any value specified in the Node configuration to the left will be preferred over any value present in the received message.  For example, to find portfolios by a name provided via this Node's input, <strong>do not</strong> specify a "portfolio name" in the Node configuration.</p>
+
+  <h3>References</h3>
+    <ul>
+      <li><a href="https://console.bluemix.net/docs/services/Cloudant/api/cloudant_query.html#selector-syntax" target="_blank">Cloudant Query selector syntax</li>
+      <li><a href="https://console.bluemix.net/docs/services/InvestmentPortfolio/index.html" target="_blank">IBM Cloud Investment Portfolio service </
+    </ul>
 </script>
