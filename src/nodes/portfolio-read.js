@@ -2,7 +2,8 @@ import {
   inspect,
   normalizeArray,
   normalizeString,
-  parseDate
+  parseDate,
+  normalizeJson
 } from '../lib/utils';
 
 import _ from 'lodash/fp';
@@ -32,7 +33,7 @@ export default function(RED) {
         hasNoKey: normalizeArray(config.hasNoKey),
         hasAnyKey: normalizeArray(config.hasAnyKey),
         hasKeyValue: normalizeString(config.hasKeyValue),
-        selector: normalizeString(config.selector),
+        selector: normalizeJson(config.selector),
         sort: config.sort,
         limit: config.limit,
         atDate: parseDate(config.date, config.time)
@@ -47,11 +48,7 @@ export default function(RED) {
         this.debug(inspect`Message received: ${msg}`);
         if (this.service) {
           try {
-            let payload = _.isObject(msg.payload) ? msg.payload : {};
-            config = _.defaults(payload, {
-              portfolioName: msg.topic,
-              ...this.config
-            });
+            config = _.defaults(this.config, msg);
             // special case: the user might provide a JSON that has a single
             // property, "selector".  it's considered optional.
             config.selector = _.getOr(
@@ -64,7 +61,7 @@ export default function(RED) {
             this.debug(inspect`Received ${portfolios.length} portfolios`);
             this.send({
               ...msg,
-              payload: portfolios
+              portfolios
             });
           } catch (err) {
             this.error(err, msg);
