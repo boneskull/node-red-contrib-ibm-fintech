@@ -45,17 +45,13 @@ export default function(RED) {
         this.trace(inspect`Message received: ${msg}`);
         if (this.service) {
           try {
-            let payload = _.isObject(msg.payload) ? msg.payload : {};
-            config = _.defaults(payload, {
-              portfolioName: msg.topic,
-              ...this.config
-            });
+            config = _.defaults(this.config, msg);
             this.debug(inspect`Computed config: ${config}`);
             const {holdings} = await this.service.getHoldings(this.config);
             this.debug(inspect`Received holdings: ${holdings}`);
             this.send({
               ...msg,
-              payload: holdings
+              holdings
             });
           } catch (err) {
             this.error(err, msg);
