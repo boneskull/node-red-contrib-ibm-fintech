@@ -67,3 +67,15 @@ export const validateParam = (schema, value) => {
     throw err;
   }
 };
+
+export const normalizeJson = v => {
+  if (typeof v === 'string') {
+    try {
+      JSON.parse(v);
+      return v;
+    } catch (ignored) {}
+  }
+  try {
+    return JSON.stringify(v);
+  } catch (ignored) {}
+};
