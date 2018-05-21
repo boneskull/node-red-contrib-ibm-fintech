@@ -69,13 +69,15 @@ export const validateParam = (schema, value) => {
 };
 
 export const normalizeJson = v => {
-  if (typeof v === 'string') {
+  if (v) {
+    if (typeof v === 'string') {
+      try {
+        JSON.parse(v);
+        return v;
+      } catch (ignored) {}
+    }
     try {
-      JSON.parse(v);
-      return v;
+      return JSON.stringify(v);
     } catch (ignored) {}
   }
-  try {
-    return JSON.stringify(v);
-  } catch (ignored) {}
 };
