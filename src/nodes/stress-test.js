@@ -72,16 +72,16 @@ export default function(RED) {
               this.status({fill: 'yellow', shape, text: 'working...'});
               shape = shape === 'ring' ? 'dot' : 'ring';
             }, 500);
-            let payload;
+            let result = {};
             try {
-              payload = await this.stressTest(config);
+              result = await this.stressTest(config);
             } finally {
               clearInterval(progress);
               this.status({});
             }
             this.send({
               ...msg,
-              payload
+              ...result
             });
           } catch (err) {
             this.error(err, msg);
