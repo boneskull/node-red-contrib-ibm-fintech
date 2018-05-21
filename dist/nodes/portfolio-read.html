@@ -30,7 +30,7 @@
           value: null
         },
         limit: {
-          value: null
+          value: 1
         },
         sort: {
           value: 'asc'
@@ -45,7 +45,7 @@
           value: ''
         },
         selector: {
-          value: '',
+          value: null,
           validate: function (v) {
             if (!v) {
               return true;
@@ -125,7 +125,7 @@
   </div>
   <div class="form-row">
     <label for="node-input-portfolioName"><i class="fa fa-book"></i> Portfolio</label>
-    <input type="text" id="node-input-portfolioName" placeholder="(from topic)"/>
+    <input type="text" id="node-input-portfolioName" placeholder="(from message)"/>
   </div>
   <div class="form-row">
     <label for="node-input-date"><i class="fa fa-calendar"></i> After Date</label>
