@@ -123,6 +123,7 @@ export const FIND_PORTFOLIO_BY_NAME_SCHEMA = Joi.object({
     .integer()
     .positive()
     .example(10)
+    .default(1)
     .description(
       oneLine`
       When the value is an integer, the number of portfolios returned is limited
@@ -133,6 +134,7 @@ export const FIND_PORTFOLIO_BY_NAME_SCHEMA = Joi.object({
   sort: Joi.string()
     .valid('asc', 'desc')
     .example('asc')
+    .default('asc')
     .description(
       oneLine`
       When the value is \`asc\`, the portfolios with the earliest timestamps
