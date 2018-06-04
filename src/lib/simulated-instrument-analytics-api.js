@@ -55,10 +55,14 @@ export class SimulatedInstrumentAnalyticsAPI extends ScenarioAPI {
     const {id, scenario} = options;
     const formData = SimulatedInstrumentAnalyticsAPI.createFormData(scenario);
     try {
-      const {data} = await this.client.post(`/instrument/${id}`, formData, {
-        headers: formData.getHeaders()
-      });
-      return {analytics: data};
+      const {analytics} = await this.client.post(
+        `/instrument/${id}`,
+        formData,
+        {
+          headers: formData.getHeaders()
+        }
+      );
+      return {analytics};
     } catch (err) {
       switch (_.get('response.status', err)) {
         case 404:
@@ -82,10 +86,10 @@ export class SimulatedInstrumentAnalyticsAPI extends ScenarioAPI {
       scenario,
       ids
     );
-    const {data} = await this.client.post('/instruments', formData, {
+    const {analytics} = await this.client.post('/instruments', formData, {
       headers: formData.getHeaders()
     });
-    return {analytics: data};
+    return {analytics};
   }
 
   get defaultApiVersion() {
