@@ -1,0 +1,62 @@
+<script>
+  (function () {
+    'use strict';
+
+    RED.nodes.registerType('simulated-instrument-analytics-read', {
+      category: 'IBM FinTech',
+      defaults: {
+        name: {
+          value: null
+        },
+        service: {
+          type: 'simulated-instrument-analytics'
+        },
+        holdings: {
+          value: null
+        },
+        scenario: {
+          value: null
+        },
+        analytic: {
+          value: 'THEO/Price',
+          required: true
+        }
+      },
+      inputs: 1,
+      outputs: 1,
+      color: '#85bb65',
+      paletteLabel: 'simulated instrument analytics',
+      label: function () {
+        return this.name || 'simulated instrument analytics';
+      },
+      oneditprepare: function () {
+        var selectedAnalyticName = this.analytic;
+        $.getJSON('/simulated-instrument-analytics/analytics')
+          .done(function (analytics) {
+            var $select = $('#node-input-analytics');
+            $select.append.apply($select, analytics.map(function (analytic) {
+              return $('<option/>').val(analytic.name)
+                .text(analytic.text);
+            }));
+            $select.val(selectedAnalyticName || '');
+          });
+      },
+      icon: 'generate-scenario.png'
+    })
+  }());
+</script>
+
+<script type="text/x-red" data-template-name="simulated-instrument-analytics-read">
+    <div class="form-row">
+      <label for="node-input-service"><i class="fa fa-bookmark"></i> Analytics  Service</label>
+      <input type="text" id="node-input-service"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-analytic"><i class="fa fa-balance-scale"></i> Analytic</label>
+      <select style="width: 70%" id="node-input-analytic"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name"/>
+    </div>
+</script>
