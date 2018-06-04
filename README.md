@@ -24,7 +24,7 @@ Usage for each Node is detailed within its "Info" tab.
 
 This module provides the following Node-RED Nodes:
 
-- **Investement Portfolio** (`portfolio`): Retrieve one or more Portfolio definitions from the Investment Porfolio service
+- **Investment Portfolio** (`portfolio`): Retrieve one or more Portfolio definitions from the Investment Porfolio service
 - **Holdings** (`holdings`): Retrieve all holdings for one or more Portfolios from the Investment Portfolio service
 - **Generate Scenario** (`generate-scenario`): Given a shock % and risk factor, generate a predictive market scenario file in CSV format using the Predictive Market Scenarios service
 - **Stress Test** (`stress-test`): Perform a stress test given a shock and factor against one or more Portfolios using the Investment Portfolio, Predictive Market Scenarios, and Simulated Instrument Analytics services
