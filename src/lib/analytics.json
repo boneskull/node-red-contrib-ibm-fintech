@@ -1,0 +1,17 @@
+[
+  {"name": "THEO/Price", "text": "Price (Clean Price)"},
+  {"name": "THEO/Value", "text": "Value (Dirty Price)"},
+  {"name": "THEO/Exposure", "text": "Exposure"},
+  {"name": "THEO/Accrued Interest", "text": "Accrued Interest"},
+  {"name": "THEO/Yield", "text": "Yield"},
+  {"name": "THEO/Macaulay Duration", "text": "Macaulay Duration"},
+  {"name": "THEO/Adjusted Duration", "text": "Adjusted Duration"},
+  {"name": "THEO/Effective Duration", "text": "Effective Duration"},
+  {"name": "THEO/Adjusted Duration2", "text": "Spread Duration"},
+  {"name": "THEO/Effective Convexity", "text": "Effective Convexity"},
+  {"name": "THEO/Delta", "text": "Delta"},
+  {"name": "THEO/Gamma", "text": "Gamma"},
+  {"name": "THEO/Domestic Rho", "text": "Domestic Rho"},
+  {"name": "THEO/Theta", "text": "Theta"},
+  {"name": "THEO/Vega", "text": "Vega"}
+]

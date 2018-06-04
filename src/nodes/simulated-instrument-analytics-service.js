@@ -1,5 +1,7 @@
 import {SimulatedInstrumentAnalyticsAPI} from '../lib/simulated-instrument-analytics-api';
+import _ from 'lodash/fp';
 import {inspect} from '../lib/utils';
+import analytics from '../lib/analytics.json';
 
 export default function(RED) {
   class SimulatedInstrumentAnalyticsServiceNode {
@@ -29,4 +31,8 @@ export default function(RED) {
       }
     }
   );
+
+  RED.httpAdmin.get('/simulated-instrument-analytics/analytics', (req, res) => {
+    res.json(_.sortBy('name', analytics));
+  });
 }
