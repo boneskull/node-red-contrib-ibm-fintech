@@ -47,7 +47,7 @@ export default function(RED) {
           try {
             config = _.defaults(this.config, msg);
             this.debug(inspect`Computed config: ${config}`);
-            const {holdings} = await this.service.getHoldings(this.config);
+            const {holdings} = await this.service.getHoldings(config);
             this.debug(inspect`Received holdings: ${holdings}`);
             this.send({
               ...msg,
