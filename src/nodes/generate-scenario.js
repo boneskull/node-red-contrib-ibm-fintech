@@ -3,6 +3,13 @@ import {inspect, normalizeString} from '../lib/utils';
 import _ from 'lodash/fp';
 
 /**
+ * Returns config-relevant props from a Message payload
+ * @param {Object} payload - Payload
+ * @returns {Object} relevant props
+ */
+const getConfigFromPayload = _.pick(['factor', 'shock']);
+
+/**
  * Creates the {@link GenerateScenarioNode} Node
  * @export
  * @param {Red} RED - Node-RED API
@@ -32,7 +39,7 @@ export default function(RED) {
       this.trace(inspect`Processed config: ${this.config}`);
 
       this.on('input', async msg => {
-        this.debug(inspect`Message received: ${msg}`);
+        this.trace(inspect`Message received: ${msg}`);
         if (predictiveMarketScenarioService) {
           try {
             let shape = 'ring';
@@ -41,16 +48,20 @@ export default function(RED) {
               shape = shape === 'ring' ? 'dot' : 'ring';
             }, 500);
             let result = {};
-            const config = _.defaults(this.config, msg.payload);
+            const config = _.defaults(
+              this.config,
+              getConfigFromPayload(msg.payload)
+            );
             try {
               result = await predictiveMarketScenarioService.generate(config);
+              this.trace(inspect`Received scenario: ${result}`);
             } finally {
               clearInterval(progress);
               this.status({});
             }
             this.send({
               ...msg,
-              ...result
+              payload: {...msg.payload, ...result}
             });
           } catch (err) {
             this.error(err, msg);

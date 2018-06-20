@@ -8,6 +8,18 @@ import {
 import _ from 'lodash/fp';
 
 /**
+ * Returns config-relevant props from a Message's payload
+ * @param {Object} payload - Payload
+ * @returns {Object} relevant props
+ */
+const getConfigFromPayload = _.pick([
+  'portfolioName',
+  'latest',
+  'hasKey',
+  'atDate'
+]);
+
+/**
  * Creates the {@link HoldingsReadNode} Node
  * @export
  * @param {Red} RED - Node-RED API
@@ -45,13 +57,13 @@ export default function(RED) {
         this.trace(inspect`Message received: ${msg}`);
         if (this.service) {
           try {
-            config = _.defaults(this.config, msg);
-            this.debug(inspect`Computed config: ${config}`);
+            config = _.defaults(this.config, getConfigFromPayload(msg.payload));
+            this.trace(inspect`Computed config: ${config}`);
             const {holdings} = await this.service.getHoldings(config);
-            this.debug(inspect`Received holdings: ${holdings}`);
+            this.trace(inspect`Received holdings: ${holdings}`);
             this.send({
               ...msg,
-              holdings
+              payload: {...msg.payload, holdings}
             });
           } catch (err) {
             this.error(err, msg);

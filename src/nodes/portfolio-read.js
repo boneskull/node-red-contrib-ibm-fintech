@@ -9,6 +9,23 @@ import {
 import _ from 'lodash/fp';
 
 /**
+ * Returns config-relevant props from a Message payload
+ * @param {Object} payload - Payload
+ * @returns {Object} relevant props
+ */
+const getConfigFromPayload = _.pick([
+  'portfolioName',
+  'hasKey',
+  'hasNoKey',
+  'hasAnyKey',
+  'hasKeyValue',
+  'selector',
+  'sort',
+  'limit',
+  'atDate'
+]);
+
+/**
  * Creates the {@link InvestmentPortfolioReadNode} Node
  * @export
  * @param {Red} RED - Node-RED API
@@ -45,10 +62,10 @@ export default function(RED) {
       this.trace(inspect`Processed config: ${this.config}`);
 
       this.on('input', async msg => {
-        this.debug(inspect`Message received: ${msg}`);
+        this.trace(inspect`Message received: ${msg}`);
         if (this.service) {
           try {
-            config = _.defaults(this.config, msg);
+            config = _.defaults(this.config, getConfigFromPayload(msg.payload));
             // special case: the user might provide a JSON that has a single
             // property, "selector".  it's considered optional.
             config.selector = _.getOr(
@@ -56,12 +73,12 @@ export default function(RED) {
               'selector.selector',
               config
             );
-            this.debug(inspect`Computed config: ${config}`);
+            this.trace(inspect`Computed config: ${config}`);
             const {portfolios} = await this.service.findPortfolios(this.config);
-            this.debug(inspect`Received ${portfolios.length} portfolios`);
+            this.trace(inspect`Received ${portfolios.length} portfolios`);
             this.send({
               ...msg,
-              portfolios
+              payload: {...msg.payload, portfolios}
             });
           } catch (err) {
             this.error(err, msg);

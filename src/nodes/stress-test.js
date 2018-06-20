@@ -8,6 +8,15 @@ import {
 import {Stresser} from '../lib/stresser';
 import _ from 'lodash/fp';
 
+const getConfigFromPayload = _.pick([
+  'factor',
+  'shock',
+  'portfolioName',
+  'latest',
+  'hasKey',
+  'atDate'
+]);
+
 /**
  * Creates the {@link StressTestNode} Node
  * @export
@@ -62,11 +71,14 @@ export default function(RED) {
       this.trace(inspect`Processed config: ${this.config}`);
 
       this.on('input', async msg => {
-        this.debug(inspect`Message received: ${msg}`);
+        this.trace(inspect`Message received: ${msg}`);
         if (this.stressTest) {
           try {
-            const config = _.defaults(this.config, msg.payload);
-            this.debug(inspect`Computed config: ${config}`);
+            const config = _.defaults(
+              this.config,
+              getConfigFromPayload(msg.payload)
+            );
+            this.trace(inspect`Computed config: ${config}`);
             let shape = 'ring';
             const progress = setInterval(() => {
               this.status({fill: 'yellow', shape, text: 'working...'});
@@ -75,13 +87,14 @@ export default function(RED) {
             let result = {};
             try {
               result = await this.stressTest(config);
+              this.trace(inspect`Received result: ${result}`);
             } finally {
               clearInterval(progress);
               this.status({});
             }
             this.send({
               ...msg,
-              ...result
+              payload: {...msg.payload, ...result}
             });
           } catch (err) {
             this.error(err, msg);
