@@ -93,7 +93,15 @@ describe('Predictive Market Scenario', function() {
           await api.generate({factor, shock});
           expect(api.client.post, 'to have a call exhaustively satisfying', [
             `/generate_predictive`,
-            {data: {risk_factor: factor, shock}, headers: {accept: 'text/csv'}}
+            {
+              market_change: {risk_factor: factor, shock}
+            },
+            {
+              headers: {
+                accept: 'text/csv',
+                'X-IBM-Access-Token': credentials.accessToken
+              }
+            }
           ]);
         });
 
