@@ -153,13 +153,6 @@ export default function(RED) {
       res.sendStatus(404);
     }
   );
-  // .put('/simulated-instrument-analytics/uploadStatus/:id', (req, res) => {
-  //   const node = RED.nodes.getNode(req.params.id);
-  //   if (node) {
-  //     node.status(req.body.status || {});
-  //   }
-  //   res.sendStatus(200);
-  // });
 
   RED.nodes.registerType(
     'simulated-instrument-analytics-read',
