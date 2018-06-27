@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "babel -d dist src",
+    "build": "babel -D -d dist src",
     "test": "mocha --require babel-register --require test/setup.js \"test/**/*.spec.js\"",
     "format": "prettier-eslint --write \"*.js\" \"src/**/*.js\" \"test/**/*.js\"",
     "lint": "eslint .",

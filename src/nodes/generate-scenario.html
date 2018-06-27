@@ -1,0 +1,66 @@
+<script>
+  (function () {
+    'use strict';
+   
+    RED.nodes.registerType('generate-scenario', {
+      category: 'IBM FinTech',
+      defaults: {
+        name: {
+          value: null
+        },
+        predictiveMarketScenarioService: {
+          type: 'predictive-market-scenario'
+        },
+        shock: {
+          value: ''
+        },
+        factor: {
+          value: '',
+        }
+      },
+      inputs: 1,
+      outputs: 1,
+      color: '#85bb65',
+      paletteLabel: 'generate scenario',
+      label: function () {
+        return this.name || this.portfolioName || 'generate scenario';
+      },
+      oneditprepare: function () {
+        var selectedFactorId = this.factor;
+        $.getJSON('/predictive-market-scenario/factors')
+          .done(function (factors) {
+            var $select = $('#node-input-factor');
+            $select.append.apply($select, factors.map(function (factor) {
+              return $('<option/>').val(factor.id)
+                .text(factor.name);
+            }));
+            $select.val(selectedFactorId || '');
+          });
+
+        $('#node-input-hasKey').tagsInput(TAGS_INPUT_OPTIONS);
+      },
+      icon: 'generate-scenario.png'
+    })
+  }());
+</script>
+
+<script type="text/x-red" data-template-name="generate-scenario">
+    <div class="form-row">
+      <label for="node-input-predictiveMarketScenarioService"><i class="fa fa-bookmark"></i> Scenario Service</label>
+      <input type="text" id="node-input-predictiveMarketScenarioService"/>
+    </div>
+    <div class="form-row">
+      <label for="node-input-shock"><i class="fa fa-bolt"></i> Shock</label>
+      <input style="width: 30%" type="number" id="node-input-shock" placeholder="(from message)"/>%
+    </div>
+    <div class="form-row">
+      <label for="node-input-factor"><i class="fa fa-balance-scale"></i> Risk Factor</label>
+      <select style="width: 70%" id="node-input-factor">
+        <option value="">(from message)</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name"/>
+    </div>
+</script>

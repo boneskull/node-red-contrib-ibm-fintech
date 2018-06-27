@@ -1,0 +1,183 @@
+<script>
+  (function () {
+    'use strict';
+
+    var TAB = 9;
+    var ENTER = 13;
+
+    RED.nodes.registerType('simulated-instrument-analytics-read', {
+      category: 'IBM FinTech',
+      defaults: {
+        name: {
+          value: null
+        },
+        service: {
+          type: 'simulated-instrument-analytics'
+        },
+        ids: {
+          value: []
+        },
+        scenario: {
+          value: null
+        },
+        scenarioFilename: {
+          value: null
+        },
+        scenarioFilesize: {
+          value: null
+        },
+        analytic: {
+          value: 'THEO/Price',
+          required: true
+        }
+      },
+      inputs: 1,
+      outputs: 1,
+      color: '#85bb65',
+      paletteLabel: 'simulated instrument analytics',
+      label: function () {
+        return this.name || 'simulated instrument analytics';
+      },
+      oneditprepare: function () {
+        var node = this;
+        var $existingFile = $('#sia-scenario-existing-file');
+        var $uploadFile = $('#sia-scenario-upload-file');
+        var $uploadInput = $('#sia-scenario-upload-input');
+        var $cancelUploadFile = $('#sia-scenario-upload-cancel');
+        var selectedAnalyticName = node.analytic;
+
+        $.getJSON('/simulated-instrument-analytics/analytics')
+          .done(function (analytics) {
+            var $select = $('#node-input-analytics');
+            $select.append.apply($select, analytics.map(function (analytic) {
+              return $('<option/>').val(analytic.name)
+                .text(analytic.text);
+            }));
+            $select.val(selectedAnalyticName || '');
+          });
+
+        $('#sia-scenario-upload-input').change(function (evt) {
+          if (this.files.length) {
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+              $('#node-input-scenario').val(evt.target.result);
+              node.scenario = evt.target.result;
+              $('#node-input-scenarioFilename').val(file.name);
+              node.scenarioFilename = file.name;
+              $('#node-input-scenarioFilesize').val(evt.target.result.length);
+              node.scenarioFilesize = node.scenario.length;
+              initExistingFile(node.scenarioFilename);
+            };
+            reader.readAsText(file);
+          } else if (node.scenarioFilename) {
+            initExistingFile(node.scenarioFilename);
+          }
+        });
+
+        $('#sia-scenario-replace-file').click(function (evt) {
+          evt.preventDefault();
+          initFileInput(true);
+        });
+
+        $('#sia-scenario-upload-cancel').click(function (evt) {
+          evt.preventDefault();
+          initExistingFile(node.scenarioFilename)
+        });
+
+        if (node.scenarioFilename) {
+          initExistingFile(node.scenarioFilename);
+        } else {
+          initFileInput();
+        }
+
+        initIdsList();
+
+        function initFileInput(replacing) {
+          $existingFile.hide();
+          $uploadFile.show();
+          if (replacing) {
+            $cancelUploadFile.show();
+          } else {
+            $cancelUploadFile.hide();
+          }
+        }
+
+        function initExistingFile(filename) {
+          if (filename) {
+            $existingFile.show();
+            $uploadFile.hide();
+            $('#sia-scenario-existing-file-name').text(filename);
+          }
+        }
+
+        function initIdsList() {
+          var $ids = $('#node-input-ids-container');
+          $ids.editableList({
+            removable: true,
+            sortable: false,
+            addItem: function($container) {
+              var $input = $('<input type="text"/>').on('keyup', function(evt) {
+                if (evt.which === ENTER || evt.which === TAB) {
+                  event.preventDefault();
+                  $add.trigger('click');
+                }
+              })
+              $container.css({overflow: 'hidden', whitespace: 'nowrap'})
+                .append($input);
+            }
+          });
+          var $add = $ids.find('.red-ui-editableList-addButton');
+
+          node.ids.forEach(function(id) {
+            $ids.editableList('addItem', id);
+          });
+        }
+      },
+      oneditsave: function () {
+        // see https://github.com/node-red/node-red/issues/1773
+        this.ids = Array.prototype.slice.call(
+          $('#node-input-ids-container').editableList('items')
+        ).map(function (item) {
+          return $(item).find('input').val();
+        });
+      },
+      icon: 'simulated-instrument-analytics.png'
+    })
+  }());
+</script>
+
+<script type="text/x-red" data-template-name="simulated-instrument-analytics-read">
+  <div class="form-row">
+    <label for="node-input-service"><i class="fa fa-bookmark"></i> Analytics Service</label>
+    <input type="text" id="node-input-service"/>
+  </div>
+  <div class="form-row">
+    <label for="node-input-analytic"><i class="fa fa-balance-scale"></i> Analytic</label>
+    <select style="width: 70%" id="node-input-analytic"/>
+  </div>
+  <div class="form-row" style="margin-bottom: 0;">
+    <label style="width: auto;"><i class="fa fa-list"></i> Instrument IDs</label>
+  </div>
+  <div class="form-row node-input-ids-container-row">
+    <ol id="node-input-ids-container" style="min-height: 100px; min-width: 450px;"/>
+  </div>
+  <div class="form-row">
+    <label for="node-input-scenario"><i class="fa fa-balance-scale"></i> Scenario</label>
+    <input type="hidden" id="node-input-scenario" />
+    <input type="hidden" id="node-input-scenarioFilename"/>
+    <input type="hidden" id="node-input-scenarioFilesize"/>
+    <span id="sia-scenario-upload-file" style="width: 70%; display: none;">
+      <input type="file" id="sia-scenario-upload-input" style="width: auto;"/>
+      <button id="sia-scenario-upload-cancel" style="display: none;">Cancel</button>
+    </span>
+    <span id="sia-scenario-existing-file" style="width: 70%; display: none;">
+      <strong id="sia-scenario-existing-file-name" />
+      <button id="sia-scenario-replace-file">Replace...</button>
+    </span>
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name"/>
+  </div>
+</script>

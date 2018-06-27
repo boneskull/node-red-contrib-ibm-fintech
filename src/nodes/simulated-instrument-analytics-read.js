@@ -11,7 +11,7 @@ import {writeFile, readFile} from 'fs';
  * @param {Object} payload - Payload
  * @returns {Object} relevant props
  */
-const getConfigFromPayload = _.pick(['holdings', 'scenario', 'analytics']);
+const getConfigFromPayload = _.pick(['ids', 'scenario', 'analytic']);
 
 const MAX_FILE_SIZE = '1mb';
 
@@ -35,7 +35,7 @@ export default function(RED) {
       RED.nodes.createNode(this, config);
 
       this.config = {
-        holdings: normalizeArray(config.holdings),
+        ids: normalizeArray(config.instrumentIds),
         analytic: normalizeString(config.analytic)
       };
 
