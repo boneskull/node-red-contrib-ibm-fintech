@@ -1,8 +1,7 @@
 extends:
   - semistandard
-  - prettier
-plugins:
-  - prettier
+  - plugin:prettier/recommended
+  - prettier/standard
 rules:
   prettier/prettier:
     - error
@@ -23,3 +22,5 @@ overrides:
     globals:
       expect: true
       sinon: true
+plugins:
+  - prettier

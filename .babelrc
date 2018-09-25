@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
         "targets": {
           "node": "4"
@@ -11,8 +11,13 @@
   ],
   "plugins": [
     "add-module-exports",
-    ["transform-object-rest-spread", {"useBuiltIns": true}],
-    "transform-runtime",
-    "inline-json-import"
+    [
+      "@babel/plugin-proposal-object-rest-spread",
+      {
+        "useBuiltIns": true
+      }
+    ],
+    "@babel/plugin-transform-runtime",
+    "inline-json"
   ]
 }

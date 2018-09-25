@@ -7,6 +7,9 @@ import d from 'debug';
 
 const debug = d('ibm-fintech:simulated-instrument-analytics');
 
+export const DUMMY_SCENARIO = `Scenario Set,Scenario Set Name,Scenario Name,Scenario Probability,Scenario Color,Scenario Variable,Scenario Start Time,Scenario Attribute,Time Evolution from Trigger,Time Evolution to Trigger,Trigger Holder,Scenario Shift Rule,Scenario Type,Scenario Replacement Value
+,FluffyRooster,BASE,,,,,,,,,,,`;
+
 /**
  * Provides wrapper around Simulated Instrument Analytics API
  *
@@ -52,7 +55,7 @@ export class SimulatedInstrumentAnalyticsAPI extends ScenarioAPI {
    */
   async instrument(options = {}) {
     // TODO validate input
-    const {id, scenario} = options;
+    let {id, scenario} = options;
     const formData = SimulatedInstrumentAnalyticsAPI.createFormData(scenario);
     try {
       const {analytics} = await this.client.post(
@@ -65,7 +68,7 @@ export class SimulatedInstrumentAnalyticsAPI extends ScenarioAPI {
       return {analytics};
     } catch (err) {
       switch (_.get('response.status', err)) {
-        case 404:
+        case '404':
           throw new Error(`Instrument with ID "${id}" not found!`);
       }
       throw err;
@@ -86,10 +89,10 @@ export class SimulatedInstrumentAnalyticsAPI extends ScenarioAPI {
       scenario,
       ids
     );
-    const {analytics} = await this.client.post('/instruments', formData, {
+    const {data} = await this.client.post('/instruments', formData, {
       headers: formData.getHeaders()
     });
-    return {analytics};
+    return data;
   }
 
   get defaultApiVersion() {

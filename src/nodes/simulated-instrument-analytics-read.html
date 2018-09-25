@@ -15,7 +15,8 @@
           type: 'simulated-instrument-analytics'
         },
         ids: {
-          value: []
+          value: null,
+          required: true
         },
         scenario: {
           value: null
@@ -48,7 +49,7 @@
 
         $.getJSON('/simulated-instrument-analytics/analytics')
           .done(function (analytics) {
-            var $select = $('#node-input-analytics');
+            var $select = $('#node-input-analytic');
             $select.append.apply($select, analytics.map(function (analytic) {
               return $('<option/>').val(analytic.name)
                 .text(analytic.text);
@@ -91,8 +92,6 @@
           initFileInput();
         }
 
-        initIdsList();
-
         function initFileInput(replacing) {
           $existingFile.hide();
           $uploadFile.show();
@@ -110,37 +109,6 @@
             $('#sia-scenario-existing-file-name').text(filename);
           }
         }
-
-        function initIdsList() {
-          var $ids = $('#node-input-ids-container');
-          $ids.editableList({
-            removable: true,
-            sortable: false,
-            addItem: function($container) {
-              var $input = $('<input type="text"/>').on('keyup', function(evt) {
-                if (evt.which === ENTER || evt.which === TAB) {
-                  event.preventDefault();
-                  $add.trigger('click');
-                }
-              })
-              $container.css({overflow: 'hidden', whitespace: 'nowrap'})
-                .append($input);
-            }
-          });
-          var $add = $ids.find('.red-ui-editableList-addButton');
-
-          node.ids.forEach(function(id) {
-            $ids.editableList('addItem', id);
-          });
-        }
-      },
-      oneditsave: function () {
-        // see https://github.com/node-red/node-red/issues/1773
-        this.ids = Array.prototype.slice.call(
-          $('#node-input-ids-container').editableList('items')
-        ).map(function (item) {
-          return $(item).find('input').val();
-        });
       },
       icon: 'simulated-instrument-analytics.png'
     })
@@ -157,10 +125,8 @@
     <select style="width: 70%" id="node-input-analytic"/>
   </div>
   <div class="form-row" style="margin-bottom: 0;">
-    <label style="width: auto;"><i class="fa fa-list"></i> Instrument IDs</label>
-  </div>
-  <div class="form-row node-input-ids-container-row">
-    <ol id="node-input-ids-container" style="min-height: 100px; min-width: 450px;"/>
+    <label for="node-input-ids" style="width: auto;"><i class="fa fa-list"></i> Instruments</label>
+    <textarea id="node-input-ids" style="width: 70%"/>
   </div>
   <div class="form-row">
     <label for="node-input-scenario"><i class="fa fa-balance-scale"></i> Scenario</label>
@@ -180,4 +146,42 @@
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name"/>
   </div>
+</script>
+
+<script type="text/x-red" data-help-name="simulated-instrument-analytics-read">
+
+  <p>Run simulated instrument analytics against one or more instrument IDs, with an optional scenario.</p>
+  
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt class="required">ids <span class="property-type">string[] | string</span>
+    </dt>
+    <dd>A JavaScript array of instrument IDs, or a comma-separated list of instrument IDs.</dd>
+
+    <dt class="optional">analytic <span class="property-type">string</span></dt>
+    <dd>Filter result by portfolios having this date.  Must be ISO-8601-compliant string (e.g., "2018-01-01T00:00:00Z") or JavaScript Date object.</dd>
+
+    <dt class="optional">scenario <span class="property-type">string</span></dt>
+    <dd>A UTF-8 encoded CSV file representing the scenario.</dd>
+  </dl>
+  
+  <h3>Outputs</h3>
+  <ol class="node-ports">
+    <li>Standard output
+      <dl class="message-properties">
+        <dt>portfolios <span class="property-type">object[]</span></dt>
+        <dd>An array of portfolio objects having properties `name`, `timestamp`, and `closed`.</dd>
+      </dl>
+    </li>
+  </ol>
+  
+  <h3>Details</h3>
+  <p>Any value specified in the Node configuration to the left will be preferred over any value present in the received message.  For example, to find portfolios by a name provided via this Node's input, <strong>do not</strong> specify a "portfolio name" in the Node configuration.</p>
+
+  <h3>References</h3>
+  <ul>
+    <li><a href="https://console.bluemix.net/docs/services/Cloudant/api/cloudant_query.html#selector-syntax" target="_blank">Cloudant Query selector syntax</li>
+    <li><a href="https://console.bluemix.net/docs/services/InvestmentPortfolio/index.html" target="_blank">IBM Cloud Investment Portfolio service </
+  </ul>
+
 </script>

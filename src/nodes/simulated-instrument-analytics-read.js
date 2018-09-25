@@ -1,10 +1,10 @@
-import {inspect, normalizeString, normalizeArray} from '../lib/utils';
-
-import _ from 'lodash/fp';
 import bodyParser from 'body-parser';
+import {readFile, writeFile} from 'fs';
+import _ from 'lodash/fp';
 import mkdirp from 'mkdirp';
 import {join} from 'path';
-import {writeFile, readFile} from 'fs';
+
+import {inspect, normalizeArray, normalizeString} from '../lib/utils';
 
 /**
  * Returns config-relevant props from a Message payload
@@ -14,6 +14,9 @@ import {writeFile, readFile} from 'fs';
 const getConfigFromPayload = _.pick(['ids', 'scenario', 'analytic']);
 
 const MAX_FILE_SIZE = '1mb';
+
+const DUMMY_SCENARIO = `Scenario Set,Scenario Set Name,Scenario Name,Scenario Probability,Scenario Color,Scenario Variable,Scenario Start Time,Scenario Attribute,Time Evolution from Trigger,Time Evolution to Trigger,Trigger Holder,Scenario Shift Rule,Scenario Type,Scenario Replacement Value
+,FluffyRooster,BASE,,,,,,,,,,,`;
 
 /**
  * Creates the {@link SimulatedInstrumentAnalyticsNode} Node
@@ -35,12 +38,15 @@ export default function(RED) {
       RED.nodes.createNode(this, config);
 
       this.config = {
-        ids: normalizeArray(config.instrumentIds),
+        ids: normalizeArray(config.ids),
         analytic: normalizeString(config.analytic)
       };
 
-      this.filename = join(STORAGE_DIR, `scenario-${this.id}.csv`);
+      this.filename = '';
 
+      /**
+       * @type SimulatedInstrumentAnalyticsServiceNode
+       */
       const simulatedInstrumentAnalyticsService = RED.nodes.getNode(
         config.service
       );
@@ -63,7 +69,7 @@ export default function(RED) {
           } catch (err) {
             if (err.code !== 'ENOENT') {
               this.error(err);
-              throw err;
+              return;
             }
           }
 
@@ -81,10 +87,7 @@ export default function(RED) {
               clearInterval(progress);
               this.status({});
             }
-            this.send({
-              ...msg,
-              payload: {...msg.payload, ...result}
-            });
+            this.send({...msg, payload: {...msg.payload, ...result}});
           } catch (err) {
             this.error(err, msg);
           }
@@ -98,15 +101,17 @@ export default function(RED) {
     }
 
     async setScenario(scenario) {
-      const filename = this.filename;
+      const filename = (this.filename = join(
+        STORAGE_DIR,
+        `scenario-${this.id}.csv`
+      ));
       return new Promise((resolve, reject) => {
         writeFile(filename, scenario, 'utf8', err => {
           if (err) {
-            reject(err);
-            return;
+            return reject(err);
           }
           this._cachedScenario = {scenario, filename, bytes: scenario.length};
-          resolve({filename, bytes: scenario.length});
+          resolve(this._cachedScenario);
         });
       });
     }
@@ -114,17 +119,23 @@ export default function(RED) {
     async getScenario() {
       const filename = this.filename;
       if (this._cachedScenario) {
-        return this._cachedScenario;
+        return this._cachedScenario.scenario;
       }
-      return new Promise((resolve, reject) => {
-        readFile(filename, 'utf8', (err, scenario) => {
-          if (err) {
-            return reject(err);
-          }
-          this._cachedScenario = {scenario, bytes: scenario.length, filename};
-          resolve(this._cachedScenario);
+      let scenario;
+      if (filename) {
+        scenario = await new Promise((resolve, reject) => {
+          readFile(filename, 'utf8', (err, scenario) => {
+            if (err) {
+              return reject(err);
+            }
+            resolve(scenario);
+          });
         });
-      });
+      } else {
+        scenario = DUMMY_SCENARIO;
+      }
+      this._cachedScenario = {scenario, bytes: scenario.length, filename};
+      return scenario;
     }
   }
 

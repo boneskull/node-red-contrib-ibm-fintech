@@ -1,7 +1,7 @@
 import {PredictiveMarketScenarioAPI} from '../lib/predictive-market-scenario-api';
 import _ from 'lodash/fp';
-import factors from '../lib/factors.json';
 import {inspect} from '../lib/utils';
+const factors = require('../lib/factors.json');
 
 export default function(RED) {
   class PredictiveMarketScenarioServiceNode {

@@ -2,6 +2,9 @@
   (function () {
     'use strict';
 
+    var TAB = 9;
+    var ENTER = 13;
+
     RED.nodes.registerType('simulated-instrument-analytics-read', {
       category: 'IBM FinTech',
       defaults: {
@@ -11,8 +14,9 @@
         service: {
           type: 'simulated-instrument-analytics'
         },
-        holdings: {
-          value: null
+        ids: {
+          value: null,
+          required: true
         },
         scenario: {
           value: null
@@ -45,7 +49,7 @@
 
         $.getJSON('/simulated-instrument-analytics/analytics')
           .done(function (analytics) {
-            var $select = $('#node-input-analytics');
+            var $select = $('#node-input-analytic');
             $select.append.apply($select, analytics.map(function (analytic) {
               return $('<option/>').val(analytic.name)
                 .text(analytic.text);
@@ -99,9 +103,11 @@
         }
 
         function initExistingFile(filename) {
-          $existingFile.show();
-          $uploadFile.hide();
-          $('#sia-scenario-existing-file-name').text(filename);
+          if (filename) {
+            $existingFile.show();
+            $uploadFile.hide();
+            $('#sia-scenario-existing-file-name').text(filename);
+          }
         }
       },
       icon: 'simulated-instrument-analytics.png'
@@ -110,30 +116,72 @@
 </script>
 
 <script type="text/x-red" data-template-name="simulated-instrument-analytics-read">
-    <div class="form-row">
-      <label for="node-input-service"><i class="fa fa-bookmark"></i> Analytics Service</label>
-      <input type="text" id="node-input-service"/>
-    </div>
-    <div class="form-row">
-      <label for="node-input-analytic"><i class="fa fa-balance-scale"></i> Analytic</label>
-      <select style="width: 70%" id="node-input-analytic"/>
-    </div>
-    <div class="form-row">
-      <label for="node-input-scenario"><i class="fa fa-balance-scale"></i> Scenario</label>
-      <input type="hidden" id="node-input-scenario" />
-      <input type="hidden" id="node-input-scenarioFilename"/>
-      <input type="hidden" id="node-input-scenarioFilesize"/>
-      <span id="sia-scenario-upload-file" style="width: 70%; display: none;">
-        <input type="file" id="sia-scenario-upload-input" style="width: auto;"/>
-        <button id="sia-scenario-upload-cancel" style="display: none;">Cancel</button>
-      </span>
-      <span id="sia-scenario-existing-file" style="width: 70%; display: none;">
-        <strong id="sia-scenario-existing-file-name" />
-        <button id="sia-scenario-replace-file">Replace...</button>
-      </span>
-    </div>
-    <div class="form-row">
-      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-      <input type="text" id="node-input-name" placeholder="Name"/>
-    </div>
+  <div class="form-row">
+    <label for="node-input-service"><i class="fa fa-bookmark"></i> Analytics Service</label>
+    <input type="text" id="node-input-service"/>
+  </div>
+  <div class="form-row">
+    <label for="node-input-analytic"><i class="fa fa-balance-scale"></i> Analytic</label>
+    <select style="width: 70%" id="node-input-analytic"/>
+  </div>
+  <div class="form-row" style="margin-bottom: 0;">
+    <label for="node-input-ids" style="width: auto;"><i class="fa fa-list"></i> Instruments</label>
+    <textarea id="node-input-ids" style="width: 70%"/>
+  </div>
+  <div class="form-row">
+    <label for="node-input-scenario"><i class="fa fa-balance-scale"></i> Scenario</label>
+    <input type="hidden" id="node-input-scenario" />
+    <input type="hidden" id="node-input-scenarioFilename"/>
+    <input type="hidden" id="node-input-scenarioFilesize"/>
+    <span id="sia-scenario-upload-file" style="width: 70%; display: none;">
+      <input type="file" id="sia-scenario-upload-input" style="width: auto;"/>
+      <button id="sia-scenario-upload-cancel" style="display: none;">Cancel</button>
+    </span>
+    <span id="sia-scenario-existing-file" style="width: 70%; display: none;">
+      <strong id="sia-scenario-existing-file-name" />
+      <button id="sia-scenario-replace-file">Replace...</button>
+    </span>
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name"/>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="simulated-instrument-analytics-read">
+
+  <p>Run simulated instrument analytics against one or more instrument IDs, with an optional scenario.</p>
+  
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt class="required">ids <span class="property-type">string[] | string</span>
+    </dt>
+    <dd>A JavaScript array of instrument IDs, or a comma-separated list of instrument IDs.</dd>
+
+    <dt class="optional">analytic <span class="property-type">string</span></dt>
+    <dd>Filter result by portfolios having this date.  Must be ISO-8601-compliant string (e.g., "2018-01-01T00:00:00Z") or JavaScript Date object.</dd>
+
+    <dt class="optional">scenario <span class="property-type">string</span></dt>
+    <dd>A UTF-8 encoded CSV file representing the scenario.</dd>
+  </dl>
+  
+  <h3>Outputs</h3>
+  <ol class="node-ports">
+    <li>Standard output
+      <dl class="message-properties">
+        <dt>portfolios <span class="property-type">object[]</span></dt>
+        <dd>An array of portfolio objects having properties `name`, `timestamp`, and `closed`.</dd>
+      </dl>
+    </li>
+  </ol>
+  
+  <h3>Details</h3>
+  <p>Any value specified in the Node configuration to the left will be preferred over any value present in the received message.  For example, to find portfolios by a name provided via this Node's input, <strong>do not</strong> specify a "portfolio name" in the Node configuration.</p>
+
+  <h3>References</h3>
+  <ul>
+    <li><a href="https://console.bluemix.net/docs/services/Cloudant/api/cloudant_query.html#selector-syntax" target="_blank">Cloudant Query selector syntax</li>
+    <li><a href="https://console.bluemix.net/docs/services/InvestmentPortfolio/index.html" target="_blank">IBM Cloud Investment Portfolio service </
+  </ul>
+
 </script>

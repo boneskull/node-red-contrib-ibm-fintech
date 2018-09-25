@@ -1,8 +1,8 @@
 import _ from 'lodash/fp';
 import csvParse from 'csv-parse';
 import d from 'debug';
-import factors from './factors.json';
 
+const factors = require('./factors.json');
 const debug = d('ibm-fintech:stresser');
 
 /**

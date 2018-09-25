@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import _ from 'lodash/fp';
-import factors from './factors.json';
+
+const factors = require('./factors.json');
 
 export const GENERATE_SCHEMA = Joi.object({
   factor: Joi.valid(_.map('id', factors))

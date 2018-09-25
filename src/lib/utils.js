@@ -1,11 +1,12 @@
-import _ from 'lodash/fp';
 import {attempt} from 'joi';
+import _ from 'lodash/fp';
 import prependHTTP from 'prepend-http';
 import stripAnsi from 'strip-ansi';
 import {inspect as utilInspect} from 'util';
 
 /**
- * Tagged template function to return an inspected value preceeded by a string and colon
+ * Tagged template function to return an inspected value preceeded by a string
+ * and colon
  * @param {string[]} strings - String(s) prefix
  * @param {*} value - First expression
  */
@@ -28,8 +29,8 @@ export const normalizeString = v =>
   _.isString(v) && !_.isEmpty(v) ? _.trim(v) : void 0;
 
 /**
- * Normalizes strings within an Array or comma-separated string representing Array.
- * Discards empty strings, `null`, or `undefined` values.
+ * Normalizes strings within an Array or comma-separated string representing
+ * Array. Discards empty strings, `null`, or `undefined` values.
  * @param {string|Array<*>} v - Value to normalize
  * @returns {string[]} Array, may be empty
  */

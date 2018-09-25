@@ -1,7 +1,8 @@
 import {SimulatedInstrumentAnalyticsAPI} from '../lib/simulated-instrument-analytics-api';
 import _ from 'lodash/fp';
 import {inspect} from '../lib/utils';
-import analytics from '../lib/analytics.json';
+
+const analytics = require('../lib/analytics.json');
 
 export default function(RED) {
   class SimulatedInstrumentAnalyticsServiceNode {

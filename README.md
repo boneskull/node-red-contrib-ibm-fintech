@@ -39,16 +39,20 @@ In addition, each of the three services has a corresponding Configuration Node w
 
 PRs accepted!
 
+### Notes
+
+`csv-parse`, `debug`, and `joi` should remain locked to their versions while Node-RED (and thusly this package) still supports older versions of Node.js.
+
 ### Build Steps
 
 1. `git clone` this repo
 2. Execute `npm install` in your working copy
 3. Execute `npm run build` to build the Nodes
 
-**PRO TIP**: Run `npm link` in your working copy, then navigate to your Node-RED user directory (e.g., `~/.node-red`), and run `npm link node-red-contrib-ibm-fintech`.  To see changes reflected, re-run `npm run build` and restart your Node-RED instance.
+**PRO TIP**: Run `npm link` in your working copy, then navigate to your Node-RED user directory (e.g., `~/.node-red`), and run `npm link node-red-contrib-ibm-fintech`. To see changes reflected, re-run `npm run build` and restart your Node-RED instance.
 
 ## License
 
 The Node icons were adapted for use in Node-RED from [Font Awesome](https://fontawesome.com), which is [licensed CC-BY-4.0](https://fontawesome.com/license).
 
-Copyright © 2018 IBM.  Licensed Apache-2.0.
+Copyright © 2018 IBM. Licensed Apache-2.0.
