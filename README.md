@@ -18,7 +18,7 @@ $ npm i node-red-contrib-ibm-fintech
 
 ## Usage
 
-Usage for each Node is detailed within its "Info" tab.
+Usage for each Node is (mostly) detailed within its "Info" tab.
 
 ## Nodes Provided
 
@@ -41,13 +41,13 @@ PRs accepted!
 
 ### Notes
 
-`csv-parse`, `debug`, and `joi` should remain locked to their versions while Node-RED (and thusly this package) still supports older versions of Node.js.
+`csv-parse` and `joi` should remain locked to their versions while this module still supports Node.js v6.0.0 and newer.
 
 ### Build Steps
 
 1. `git clone` this repo
-2. Execute `npm install` in your working copy
-3. Execute `npm run build` to build the Nodes
+1. Execute `npm install` in your working copy
+1. Execute `npm run build` to build the Nodes
 
 **PRO TIP**: Run `npm link` in your working copy, then navigate to your Node-RED user directory (e.g., `~/.node-red`), and run `npm link node-red-contrib-ibm-fintech`. To see changes reflected, re-run `npm run build` and restart your Node-RED instance.
 
