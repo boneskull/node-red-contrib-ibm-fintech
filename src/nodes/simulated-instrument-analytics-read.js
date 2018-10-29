@@ -74,20 +74,20 @@ export default function(RED) {
           }
 
           try {
-            let result = {};
+            let instrumented = {};
             const config = _.defaults(
               _.defaults({scenario}, this.config),
               getConfigFromPayload(msg.payload)
             );
             try {
-              result = await simulatedInstrumentAnalyticsService.instrumentMany(
+              instrumented = await simulatedInstrumentAnalyticsService.instrumentMany(
                 config
               );
             } finally {
               clearInterval(progress);
               this.status({});
             }
-            this.send({...msg, payload: {...msg.payload, ...result}});
+            this.send({...msg, payload: {...msg.payload, instrumented}});
           } catch (err) {
             this.error(err, msg);
           }
