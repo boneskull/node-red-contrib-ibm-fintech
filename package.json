@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-ibm-fintech",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "IBM FinTech Nodes for Node-RED",
   "main": "index.js",
   "scripts": {
     "build": "babel --source-maps -D -d dist src",
