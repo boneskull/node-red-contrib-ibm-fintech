@@ -36,7 +36,6 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
-    "@babel/runtime": "^7.1.2",
     "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-inline-json": "^1.2.2",
     "dotenv": "^6.1.0",
@@ -61,6 +60,7 @@
     "unexpected-sinon": "^10.10.1"
   },
   "dependencies": {
+    "@babel/runtime": "^7.1.2",
     "axios": "^0.18.0",
     "axios-debug-log": "^0.4.0",
     "body-parser": "^1.18.3",
