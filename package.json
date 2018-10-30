@@ -1,13 +1,14 @@
 {
   "name": "node-red-contrib-ibm-fintech",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "IBM FinTech Nodes for Node-RED",
   "main": "index.js",
   "scripts": {
     "build": "babel --source-maps -D -d dist src",
     "test": "mocha --require @babel/register --require test/setup.js \"test/**/*.spec.js\"",
     "format": "prettier-eslint --write \"*.js\" \"src/**/*.js\" \"test/**/*.js\"",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [],
   "author": "Christopher Hiller <boneskull@boneskull.com> (https://boneskull.com/)",
