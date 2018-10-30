@@ -7,8 +7,7 @@
     "build": "babel --source-maps -D -d dist src",
     "test": "mocha --require @babel/register --require test/setup.js \"test/**/*.spec.js\"",
     "format": "prettier-eslint --write \"*.js\" \"src/**/*.js\" \"test/**/*.js\"",
-    "lint": "eslint .",
-    "precommit": "lint-staged"
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "Christopher Hiller <boneskull@boneskull.com> (https://boneskull.com/)",
@@ -46,7 +45,7 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "husky": "^1.1.2",
-    "lint-staged": "^8.0.0",
+    "lint-staged": "^7.3.0",
     "mocha": "^5.2.0",
     "nock": "^10.0.1",
     "node-red": "^0.19.4",
@@ -73,10 +72,15 @@
     "vcap_services": "^0.6.0"
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js,json}": [
       "prettier-eslint --write",
       "git add"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "prettier": {
     "singleQuote": true,

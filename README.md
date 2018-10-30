@@ -41,7 +41,7 @@ PRs accepted!
 
 ### Notes
 
-`csv-parse` and `joi` should remain locked to their versions while this module still supports Node.js v6.0.0 and newer.
+`csv-parse`, `joi`, and `lint-staged` should remain locked to their versions while this module still supports Node.js v6.0.0 and newer.
 
 ### Build Steps
 
