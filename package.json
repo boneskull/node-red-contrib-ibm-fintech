@@ -96,6 +96,6 @@
   },
   "files": [
     "dist",
-    "src"
+    "src/**/*.js"
   ]
 }
