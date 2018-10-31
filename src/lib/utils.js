@@ -22,6 +22,7 @@ export const makeHTTPSURL = _.partialRight(prependHTTP, [{https: true}]);
 
 /**
  * Trims a string if it's a string; otherwise returns `undefined`.
+ * A specific definition of "normalize."
  * @param {*} value - String to trim, or nothing
  * @returns {string|void}
  */
@@ -31,8 +32,9 @@ export const normalizeString = v =>
 /**
  * Normalizes strings within an Array or comma-separated string representing
  * Array. Discards empty strings, `null`, or `undefined` values.
+ * A specific definition of "normalize."
  * @param {string|Array<*>} v - Value to normalize
- * @returns {string[]} Array, may be empty
+ * @returns {string[]|void} Array, undefined if empty
  */
 export const normalizeArray = _.pipe(
   v => _.map(normalizeString, _.isString(v) ? _.trim(v).split(',') : v),
