@@ -15,9 +15,17 @@ const factorIds = new Set(_.map('id', factors));
  * Return `true` if row represents a stress shift
  * @see https://github.com/IBM/Predictive-Market-Stress-Testing/blob/master/run.py#L148
  * @param {string[]} row - Scenario CSV row
+ * @returns boolean
  */
 const hasStressShift = row =>
-  row.length > 14 && factorIds.has(row[5]) && row[13] !== '1';
+  row.length > 14 && factorIds.has(row[5]) && row[13] !== '1'; // what is this i don't even
+
+/**
+ * Returns value of instrumented holding
+ * @param {Object} [holding] - Instrumented holding object
+ * @returns number|void
+ */
+const getValue = _.get('values[0]["THEO/Price"]');
 
 /**
  * Given three Service instances, returns a function to execute an
@@ -59,7 +67,7 @@ export const Stresser = ({
 
   debug(`Instrumenting & parsing CSV...`);
 
-  const [simulation, parsedScenario] = await Promise.all([
+  const [analytics, parsedScenario] = await Promise.all([
     simulatedInstrumentAnalyticsService.instrumentMany({
       ids: _.map('instrumentId', holdings),
       scenario
@@ -77,7 +85,6 @@ export const Stresser = ({
       );
     })
   ]);
-  const {analytics} = simulation;
 
   const holdingsByInstrumentId = new Map(
     _.entries(_.keyBy('instrumentId', holdings))
@@ -86,8 +93,12 @@ export const Stresser = ({
     holdings: _.reduce(
       (acc, analytic) => {
         const holding = holdingsByInstrumentId.get(analytic.instrument);
-        holding['baseValue' in holding ? 'newValue' : 'baseValue'] =
-          analytic.values[0]['THEO/Price'];
+        holding['baseValue' in holding ? 'newValue' : 'baseValue'] = getValue(
+          analytic
+        );
+        if ('baseValue' in holding && 'newValue' in holding) {
+          debug(holding);
+        }
         return 'baseValue' in holding && 'newValue' in holding
           ? acc.concat(holding)
           : acc;
