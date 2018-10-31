@@ -104,7 +104,11 @@ export class InvestmentPortfolioAPI extends CloudAPI {
   async findNamedPortfolios(options = {}) {
     let params = validateParam(schemas.FIND_PORTFOLIO_BY_NAME_SCHEMA, options);
     params.hasKeyValue = params.hasKeyValue
-      ? _.pipe(_.entries, _.map(_.join(':')), _.join(','))(params.hasKeyValue)
+      ? _.pipe(
+          _.entries,
+          _.map(_.join(':')),
+          _.join(',')
+        )(params.hasKeyValue)
       : void 0;
     const path = `/portfolios/${options.portfolioName}`;
     params = normalizeParams(_.omit(['portfolioName'], params));

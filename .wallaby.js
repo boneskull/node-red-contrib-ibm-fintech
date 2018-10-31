@@ -8,14 +8,9 @@ module.exports = wallaby => {
 
     tests: ['test/**/*.spec.js'],
 
-    compilers: {
-      '**/*.js': wallaby.compilers.babel()
-    },
+    compilers: {'**/*.js': wallaby.compilers.babel()},
 
-    env: {
-      type: 'node',
-      runner: 'node'
-    },
+    env: {type: 'node', runner: 'node'},
 
     setup() {
       require('./test/setup');
