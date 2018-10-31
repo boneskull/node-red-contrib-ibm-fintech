@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel --source-maps=both -D -d dist src",
+    "coverage": "nyc --require @babel/register mocha --require test/setup.js \"test/**/*.spec.js\"",
     "test": "mocha --require @babel/register --require test/setup.js \"test/**/*.spec.js\"",
     "format": "prettier-eslint --write \"*.js\" \"src/**/*.js\" \"test/**/*.js\"",
     "lint": "eslint .",
@@ -53,6 +54,7 @@
     "mocha": "^5.2.0",
     "nock": "^10.0.1",
     "node-red": "^0.19.4",
+    "nyc": "^13.1.0",
     "prettier": "^1.14.3",
     "prettier-eslint-cli": "^4.7.1",
     "sinon": "^7.1.0",
