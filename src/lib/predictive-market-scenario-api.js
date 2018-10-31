@@ -35,14 +35,16 @@ export class PredictiveMarketScenarioAPI extends ScenarioAPI {
    *
    * @param {Object} options - Options
    * @param {string} options.factor - ID of the risk factor
-   * @param {number} [options.shock=5] - % ratio of the new to old values of the risk factor
+   * @param {number} [options.shock=5] - % ratio of the new to old values of the risk factor.  NOT a number relative to 1.
    * @returns {Promise<{{scenario: string}}>}
    * @memberof PredictiveMarketScenarioAPI
    */
   async generate(options = {}) {
     options = validateParam(schemas.GENERATE_SCHEMA, options);
     const {factor, shock} = options;
-    const data = {market_change: {risk_factor: factor, shock}};
+    const data = {
+      market_change: {risk_factor: factor, shock: (shock + 100) / 100}
+    };
     const res = await this.client.post('/generate_predictive', data, {
       headers: {
         accept: 'text/csv',
