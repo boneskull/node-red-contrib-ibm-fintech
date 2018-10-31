@@ -89,12 +89,12 @@ describe('Predictive Market Scenario', function() {
       describe('generate()', function() {
         it('should POST `/generate_predictive` path', async function() {
           const factor = 'CX_COS_ME_Gold_XCEC';
-          const shock = 0.2;
+          const shock = 2;
           await api.generate({factor, shock});
           expect(api.client.post, 'to have a call exhaustively satisfying', [
             `/generate_predictive`,
             {
-              market_change: {risk_factor: factor, shock}
+              market_change: {risk_factor: factor, shock: (shock + 100) / 100}
             },
             {
               headers: {
