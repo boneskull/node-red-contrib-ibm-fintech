@@ -20,3 +20,7 @@ cache:
     - ~/npm # cache latest npm
 notifications:
   email: false
+os:
+  - linux
+  - osx
+  - windows
