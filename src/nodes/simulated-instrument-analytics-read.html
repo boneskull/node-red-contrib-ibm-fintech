@@ -47,7 +47,7 @@
         var $cancelUploadFile = $('#sia-scenario-upload-cancel');
         var selectedAnalyticName = node.analytic;
 
-        $.getJSON('/simulated-instrument-analytics/analytics')
+        $.getJSON(location.protocol + '//' + location.host + location.pathname + '/simulated-instrument-analytics/analytics')
           .done(function (analytics) {
             var $select = $('#node-input-analytic');
             $select.append.apply($select, analytics.map(function (analytic) {

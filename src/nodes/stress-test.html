@@ -55,7 +55,7 @@
       },
       oneditprepare: function () {
         var selectedFactorId = this.factor;
-        $.getJSON('/predictive-market-scenario/factors')
+        $.getJSON(location.protocol + '//' + location.host + location.pathname + '/predictive-market-scenario/factors')
           .done(function (factors) {
             var $select = $('#node-input-factor');
             $select.append.apply($select, factors.map(function (factor) {
