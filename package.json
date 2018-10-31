@@ -4,7 +4,7 @@
   "description": "IBM FinTech Nodes for Node-RED",
   "main": "index.js",
   "scripts": {
-    "build": "babel --source-maps -D -d dist src",
+    "build": "babel --source-maps=both -D -d dist src",
     "test": "mocha --require @babel/register --require test/setup.js \"test/**/*.spec.js\"",
     "format": "prettier-eslint --write \"*.js\" \"src/**/*.js\" \"test/**/*.js\"",
     "lint": "eslint .",
